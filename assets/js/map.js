@@ -89,7 +89,7 @@ function init() {
 
 							        	directionsService.route({
 
-							        		travelMode: google.maps.TravelMode['DRIVING'],
+							        		travelMode: google.maps.DirectionsTravelMode.DRIVING,
 							        		destination: { lat: res[i]['lat'], lng: res[i]['lng'] },
 											origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
