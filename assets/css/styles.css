@@ -46,19 +46,19 @@
 	margin-bottom: 10px;
 }
 #map .star-5 {
-	background: url(assets/images/rates.png) 0 0 no-repeat;
+	background: url(../images/rates.png) 0 0 no-repeat;
 }
 #map .star-4 {
-	background: url(assets/images/rates.png) 0 -19px no-repeat;
+	background: url(../images/rates.png) 0 -19px no-repeat;
 }
 #map .star-3 {
-	background: url(assets/images/rates.png) 0 -36px no-repeat;
+	background: url(../images/rates.png) 0 -36px no-repeat;
 }
 #map .star-2 {
-	background: url(assets/images/rates.png) 0 -54px no-repeat;
+	background: url(../images/rates.png) 0 -54px no-repeat;
 }
 #map .star-1 {
-	background: url(assets/images/rates.png) 0 -74px no-repeat;
+	background: url(../images/rates.png) 0 -74px no-repeat;
 }
 #panel {
 	width: 250px;
