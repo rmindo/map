@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Navagis</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html;">
+    
+    <link rel="stylesheet" type="text/css" media="screen" href="http://www/navagis/assets/css/styles.css">
+</head>
+<body>
+
+	<header id="header"></header>
+	<main>
+		<div id="map"></div>
+
+		<div id="panel">
+			<header>
+				
+				<h1>Restaurants</h1>
+
+				<form action="" method="POST">
+					<div class="field">
+						<label>Type</label>
+						<select name="type" id="selecttype">
+							<option value="1">Casual dining</option>
+							<option value="2">Family style</option>
+							<option value="3">Ethnic</option>
+							<option value="4">Fast food</option>
+							<option value="5">Fast casual</option>
+							<option value="6">Fine dining</option>
+						</select>
+					</div>
+				</form>
+			</header>
+
+			<div id="items"></div>
+
+		</div>
+
+
+	</main>
+	<footer id="footer">
+		<script type="text/javascript" src="http://www/navagis/assets/js/map.js"></script>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzymXsPqLMjVS3E5QYCr7ejvYNjXog6ZE&callback=init"></script>
+	</footer>
+
+</body>
+</html>
