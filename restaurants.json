@@ -67,7 +67,7 @@
         "star": 4,
         "patrons": 115,
         "visits": 160,
-        "type": 6
+        "type": 0
     },
     {
         "name": "Pizza Republic",
@@ -77,7 +77,7 @@
         "star": 5,
         "patrons": 125,
         "visits": 140,
-        "type": 1
+        "type": 5
     },
     {
         "name": "The Pyramid",
@@ -97,7 +97,7 @@
         "star": 3,
         "patrons": 58,
         "visits": 80,
-        "type": 5
+        "type": 4
     },
     {
         "name": "Q Bay Restaurant",
@@ -147,7 +147,7 @@
         "star": 3,
         "patrons": 67,
         "visits": 80,
-        "type": 6
+        "type": 5
     },
     {
         "name": "The Ching Palace",
@@ -157,7 +157,7 @@
         "star": 1,
         "patrons": 10,
         "visits": 120,
-        "type": 1
+        "type": 0
     },
     {
         "name": "La Vie Parisienne",
@@ -187,7 +187,7 @@
         "star": 4,
         "patrons": 80,
         "visits": 123,
-        "type": 3
+        "type": 0
     },
     {
         "name": "Manggahan Bar and Grilling",
@@ -197,6 +197,6 @@
         "star": 5,
         "patrons": 100,
         "visits": 145,
-        "type": 6
+        "type": 3
     }
 ]

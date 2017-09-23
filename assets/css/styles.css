@@ -1,12 +1,29 @@
+body {
+	margin: 0;
+}
+.clear::after {
+	height: 0;
+    content: ".";
+    clear: both;
+    display: block;
+    visibility: hidden;
+}
+
+
+/* Map */
 #map {
 	width: 100%;
 	height: 900px;
 	background-color: rgb(229, 227, 223);
 }
+#map p {
+	font-size: 13px;
+}
 #map h1 {
-	margin: 0 0 20px;
+	margin: 5px 0;
 }
 #map label {
+	padding-left: 5px;
 	font-weight: bold;
 	margin-right: 10px;
 }
@@ -60,8 +77,10 @@
 #map .star-1 {
 	background: url(../images/rates.png) 0 -74px no-repeat;
 }
+
+/* Panel */
 #panel {
-	width: 250px;
+	width: 300px;
 	display: none;
 	padding: 20px;
 	background: #fff;
@@ -75,15 +94,48 @@
 	-webkit-background-clip: padding-box;
 	box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
 }
+#panel h3 {
+	font-size: 16px;
+}
+#panel .label-0,
+#panel .type-0 {
+	border-left: 4px solid #fbba00;
+}
+#panel .label-1,
+#panel .type-1 {
+	border-left: 4px solid #9bb97f;
+}
+#panel .label-2,
+#panel .type-2 {
+	border-left: 4px solid #4798c7;
+}
+#panel .label-3,
+#panel .type-3 {
+	border-left: 4px solid #738390;
+}
+#panel .label-4,
+#panel .type-4 {
+	border-left: 4px solid #cea081;
+}
+#panel .label-5,
+#panel .type-5 {
+	border-left: 4px solid #ff875d;
+}
+#panel .field {
+    float: left;
+    width: 125px;
+}
 #panel #items {
 	height: 500px;
 	overflow-y: scroll;
 	padding-right: 20px;
 }
 #panel #items .item {
-	margin-bottom: 10px;
-	padding-bottom: 10px;
-	border-bottom: 1px dashed #ddd;
+	margin: 10px 0;
+    padding: 10px 0 10px 15px;
+    border-top: 1px dashed #ddd;
+    border-right: 1px dashed #ddd;
+    border-bottom: 1px dashed #ddd;
 }
 #panel #items .item h3 {
 	margin: 0 0 5px;

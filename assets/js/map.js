@@ -8,10 +8,11 @@ function init() {
 
 	    if( this.readyState == 4 && this.status == 200 ) {
 
-			var marker, item, res = JSON.parse( this.responseText );
+			var marker, item, res = JSON.parse( this.responseText )['results'];
 
+			var center   = res[0]['geometry']['location'];
 			var infobox  = new google.maps.InfoWindow();
-	        var location = new google.maps.LatLng( res[0]['lat'], res[0]['lng'] );
+	        var location = new google.maps.LatLng( center['lat'], center['lng'] );
 
 
 			var map = new google.maps.Map( document.getElementById('map'), {
@@ -27,12 +28,12 @@ function init() {
 				fillOpacity: 	0.1,
 				strokeOpacity: 	0.5,
 				radius: 		1000,
+				editable: 		true,
+				draggable: 		true,
 				fillColor: 		'#ff0000',
 				strokeColor: 	'#ff0000',
 				center: 		location,
 			});
-
-
 
 
 
@@ -41,27 +42,32 @@ function init() {
 			for( i = 0; i < res.length; i++ ) {
 
 
-				if( res[i]['lat'] && res[i]['lng'] ) {
-
-					marker = new google.maps.Marker({
-
-						map: map,
-						icon: new google.maps.MarkerImage( 'assets/images/icon.png', new google.maps.Size(32, 32) ),
-						position: new google.maps.LatLng( res[i]['lat'], res[i]['lng'] )
-
-					});
-				}
+				var geo = res[i]['geometry']['location'];
 
 
-				if( res[i]['name'] ) {
+
+				var markerLocation = new google.maps.LatLng( geo['lat'], geo['lng'] );
 
 
-					item = '<h3>' + res[i]['name'] + '</h3>'
+				marker = new google.maps.Marker({
+
+					map: map,
+					icon: new google.maps.MarkerImage( 'assets/images/icon.png', new google.maps.Size(32, 32) ),
+					position: new google.maps.LatLng( geo['lat'], geo['lng'] )
+
+				});
+
+
+
+				if( res['name'] ) {
+
+
+					item = '<h3>' + res['name'] + '</h3>'
 							+'<div class="meta">'
-							+'<i class="rate star-'+ res[i]['star'] +'"></i>'
-							+'<p><b>Visits: </b> '+ res[i]['visits'] +'/day</p>'
-							+'<p><b>Patrons: </b> '+ res[i]['patrons'] +'</p>'
-							+'<p><b>Specialty: </b> '+ res[i]['specialty'] +'</p>'
+							+'<i class="rate star-'+ Math.round( res['rating'] ) +'"></i>'
+							// +'<p><b>Visits: </b> '+ res[i]['visits'] +'/day</p>'
+							// +'<p><b>Patrons: </b> '+ res[i]['patrons'] +'</p>'
+							// +'<p><b>Specialty: </b> '+ res[i]['specialty'] +'</p>'
 							+'</div>';
 
 
@@ -80,12 +86,46 @@ function init() {
 						};
 
 
-					})( marker, item, [res[i]['lat'], res[i]['lng']] ));
+					})( marker, item, [geo['lat'], geo['lng']] ));
 
 
-					items += '<div class="item" data-type="'+ res[i]['type'] +'">'+ item +'</div>';
+
+
+
+
+
+					google.maps.event.addListener( circle, 'dragend', (function( restaurant ) {
+
+
+
+						return function() {
+
+							var markers = [];
+							var diff = google.maps.geometry.spherical.computeDistanceBetween( this.getCenter(), markerLocation );
+
+
+							if( this.getBounds().contains( markerLocation ) && diff <= this.getRadius() ) {
+
+							    markers.push( restaurant );
+							}
+
+							console.log( markers );
+						};
+
+
+
+					})( res['name'] )); 
+
+
+
+
+
+					items += '<div class="item type-'+ res['types'].length +'">'+ item +'</div>';
 				}
 			}
+
+
+
 
 			loadPanel( map, items );
 		}
@@ -93,7 +133,7 @@ function init() {
 	};
 
 
-	http.open( 'GET', 'restaurants.json', true );
+	http.open( 'GET', 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+Cebu%20City&key=AIzaSyCzymXsPqLMjVS3E5QYCr7ejvYNjXog6ZE', true );
 
 	http.send();
 }
@@ -103,13 +143,15 @@ function init() {
 
 function loadPanel( map, items ) {
 
+	var lists = document.getElementById('items');
+
 
 	google.maps.event.addListenerOnce( map, 'idle', function() {
 		
 		var panel = document.getElementById('panel');
 
 
-	    document.getElementById('items').innerHTML = items;
+	    lists.innerHTML = items;
 
 
 	    panel.style.display = 'block';
@@ -119,23 +161,30 @@ function loadPanel( map, items ) {
 
 
 
-	document.getElementById('selecttype').onchange = function() {
+	
+	for( var input in document.getElementsByTagName('input') ) {
+
+		document.getElementsByTagName('input')[input].onchange = function() {
 
 
-		var items = document.getElementById('items').children;
+			var list = document.getElementsByClassName( 'type-' + this.value );
 
-		for( i = 0; i < items.length; i++ ) {
 
-			if( this.value == items[i].dataset['type'] ) {
+			for( i = 0; i < list.length; i++ ) {
 
-				items[i].style.display = 'block';
-			
-			} else {
+				if( this.checked ) {
 
-				items[i].style.display = 'none';
+					list[i].style.display = 'block';
+
+				} else {
+
+					list[i].style.display = 'none';
+				}
 			}
-		}
-	};
+
+		};
+	}
+
 }
 
 
