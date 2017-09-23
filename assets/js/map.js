@@ -87,23 +87,24 @@ function init() {
 										var directionsService = new google.maps.DirectionsService;
 
 
-										console.log(position);
 							        	directionsService.route({
 
 							        		travelMode: google.maps.TravelMode['DRIVING'],
 							        		destination: { lat: res[i]['lat'], lng: res[i]['lng'] },
 											origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
-										}, function( response, status) {
+										}, function( response, status ) {
 
 											if( status == 'OK') {
-
+												
+										console.log(position);
 												directionsDisplay.setDirections( response );
 
 											} else {
 
 												window.alert('Directions request failed due to ' + status );
 											}
+
 										});
 
 
