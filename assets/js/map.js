@@ -8,16 +8,17 @@ function init() {
 
 	    if( this.readyState == 4 && this.status == 200 ) {
 
-			var marker, item;
+			var marker, item, res = JSON.parse( this.responseText );
 
-			var res = JSON.parse( this.responseText );
-
-			var infowindow  = new google.maps.InfoWindow();
-	        var location 	= new google.maps.LatLng( res[0]['lat'], res[0]['lng'] );
+			var infobox  = new google.maps.InfoWindow();
+	        var location = new google.maps.LatLng( res[0]['lat'], res[0]['lng'] );
 
 
-
-			var map = new google.maps.Map( document.getElementById('map'), { zoom: 16, center: location, mapTypeId: google.maps.MapTypeId.terrain });
+			var map = new google.maps.Map( document.getElementById('map'), {
+				zoom: 16,
+				center: location,
+				mapTypeId: google.maps.MapTypeId.terrain
+			});
 
 
 			var circle = new google.maps.Circle({
@@ -63,8 +64,6 @@ function init() {
 							+'<p><b>Specialty: </b> '+ res[i]['specialty'] +'</p>'
 							+'</div>';
 
-					items += '<div class="item" data-type="'+ res[i]['type'] +'">'+ item +'</div>';
-
 
 					google.maps.event.addListener( marker, 'click', ( function( marker, item, pos ) {
 
@@ -74,14 +73,17 @@ function init() {
 							var tip = '<div class="tip">'+ item + '<button id="getlocation">Get Direction</button></div>';
 
 
-							infowindow.setContent( tip );
-							infowindow.open( map, marker );
+							infobox.setContent( tip );
+							infobox.open( map, marker );
 
 							getLocation( pos );
 						};
 
 
 					})( marker, item, [res[i]['lat'], res[i]['lng']] ));
+
+
+					items += '<div class="item" data-type="'+ res[i]['type'] +'">'+ item +'</div>';
 				}
 			}
 
@@ -94,7 +96,6 @@ function init() {
 	http.open( 'GET', 'restaurants.json', true );
 
 	http.send();
-
 }
 
 
@@ -156,13 +157,13 @@ function getLocation( pos ) {
 				var directionsService = new google.maps.DirectionsService;
 
 
-				var directionmap = new google.maps.Map( document.getElementById('map'), { 
+				var mapdirection = new google.maps.Map( document.getElementById('map'), { 
 					zoom: 10, 
 					center: {lat: position.coords.latitude, lng: position.coords.longitude },
 					mapTypeId: google.maps.MapTypeId.terrain 
 				});
 
-				directionsDisplay.setMap( directionmap );
+				directionsDisplay.setMap( mapdirection );
 
 
 	        	directionsService.route({
