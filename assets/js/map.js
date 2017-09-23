@@ -86,7 +86,7 @@ function init() {
 										var directionsDisplay = new google.maps.DirectionsRenderer;
 										var directionsService = new google.maps.DirectionsService;
 
-
+console.log(res);
 							        	directionsService.route({
 
 							        		travelMode: google.maps.DirectionsTravelMode.DRIVING,
@@ -97,7 +97,7 @@ function init() {
 
 											if( status == 'OK') {
 												
-										console.log(position);
+										
 												directionsDisplay.setDirections( response );
 
 											} else {
