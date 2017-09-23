@@ -17,17 +17,6 @@ class Pages extends Controller {
 	}
 
 
-	public function about() {
-
-
-		$this->view( 'Header' );
-
-		$this->view( 'About' );
-
-		$this->view( 'Footer' );		
-	}
-
-
 
 	public function notfound() {
 
