@@ -84,7 +84,7 @@ function init() {
 
 							    if( navigator.geolocation ) {
 
-							        navigator.geolocation.getCurrentPosition(function(){
+							        navigator.geolocation.getCurrentPosition( function( position ) {
 
 							        	
 							        	directionsService.route({
