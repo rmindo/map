@@ -89,7 +89,7 @@ function init() {
 										var directionsService = new google.maps.DirectionsService;
 
 
-										var directionmap = new google.maps.Map( mapID, { zoom: 13, center: {lat: position.coords.latitude, lng: position.coords.longitude }, mapTypeId: google.maps.MapTypeId.terrain });
+										var directionmap = new google.maps.Map( mapID, { zoom: 10, center: {lat: position.coords.latitude, lng: position.coords.longitude }, mapTypeId: google.maps.MapTypeId.terrain });
 
 										directionsDisplay.setMap( directionmap );
 
