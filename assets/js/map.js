@@ -230,6 +230,7 @@ function loadRestaurants( googlemap, resto ) {
 				+'<i class="rate star-'+ resto[i]['star'] +'"></i>'
 				+'<p><b>Visits: </b> '+ resto[i]['visits'] +'/day</p>'
 				+'<p><b>Patrons: </b> '+ resto[i]['patrons'] +'</p>'
+				+'<p><b>Revenue: </b> PHP '+ resto[i]['revenue'].toLocaleString('en') +'/mo</p>'
 				+'<p><b>Specialty: </b> '+ resto[i]['specialty'] +'</p>'
 				+'</div>';
 

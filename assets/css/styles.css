@@ -20,8 +20,9 @@ body {
 	background-color: rgb(229, 227, 223);
 }
 #map p {
-	margin: 8px 0;
-	font-size: 13px;
+    margin: 5px 0;
+    font-size: 13px;
+    line-height: 20px
 }
 #map h1 {
 	margin: 0 0 10px;
