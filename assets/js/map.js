@@ -77,20 +77,22 @@ function init() {
 
 							document.getElementById('getlocation').onclick = function() {
 
-								var directionsDisplay = new google.maps.DirectionsRenderer;
-								var directionsService = new google.maps.DirectionsService;
-
 
 
 							    if( navigator.geolocation ) {
 
 							        navigator.geolocation.getCurrentPosition( function( position ) {
 
-							        	
+										var directionsDisplay = new google.maps.DirectionsRenderer;
+										var directionsService = new google.maps.DirectionsService;
+
+
+										console.log(position);
 							        	directionsService.route({
+
 							        		travelMode: google.maps.TravelMode['DRIVING'],
-											origin: { lat: position.coords.latitude, lng: position.coords.longitude },
-											destination: {lat: res[i]['lat'], lng: res[i]['lng']},
+							        		destination: { lat: res[i]['lat'], lng: res[i]['lng'] },
+											origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
 										}, function( response, status) {
 
