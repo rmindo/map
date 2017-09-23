@@ -2,16 +2,11 @@
 function init() {
 
 	var http  = new XMLHttpRequest();
-	var mapID = document.getElementById('map');
-	var panel = document.getElementById('panel');
-
 
 
 	http.onreadystatechange = function() {
 
 	    if( this.readyState == 4 && this.status == 200 ) {
-
-	    	var items = '';
 
 			var marker, item;
 
@@ -22,7 +17,7 @@ function init() {
 
 
 
-			var map = new google.maps.Map( mapID, { zoom: 16, center: location, mapTypeId: google.maps.MapTypeId.terrain });
+			var map = new google.maps.Map( document.getElementById('map'), { zoom: 16, center: location, mapTypeId: google.maps.MapTypeId.terrain });
 
 
 			var circle = new google.maps.Circle({
@@ -37,6 +32,10 @@ function init() {
 			});
 
 
+
+
+
+	    	var items = '';
 
 			for( i = 0; i < res.length; i++ ) {
 
@@ -53,10 +52,7 @@ function init() {
 				}
 
 
-
 				if( res[i]['name'] ) {
-
-					posi = [res[i]['lat'], res[i]['lng']];
 
 
 					item = '<h3>' + res[i]['name'] + '</h3>'
@@ -67,8 +63,10 @@ function init() {
 							+'<p><b>Specialty: </b> '+ res[i]['specialty'] +'</p>'
 							+'</div>';
 
+					items += '<div class="item" data-type="'+ res[i]['type'] +'">'+ item +'</div>';
 
-					google.maps.event.addListener( marker, 'click', ( function( marker, item, posi ) {
+
+					google.maps.event.addListener( marker, 'click', ( function( marker, item, pos ) {
 
 
 						return function() {
@@ -76,103 +74,16 @@ function init() {
 							infowindow.setContent( '<div class="tip">'+ item + '<button id="getlocation">Get Direction</button></div>' );
 							infowindow.open( map, marker );
 
-
-							document.getElementById('getlocation').onclick = function(e) {
-
-
-
-							    if( navigator.geolocation ) {
-
-							        navigator.geolocation.getCurrentPosition( function( position ) {
-
-										var directionsDisplay = new google.maps.DirectionsRenderer;
-										var directionsService = new google.maps.DirectionsService;
-
-
-										var directionmap = new google.maps.Map( mapID, { zoom: 10, center: {lat: position.coords.latitude, lng: position.coords.longitude }, mapTypeId: google.maps.MapTypeId.terrain });
-
-										directionsDisplay.setMap( directionmap );
-
-
-							        	directionsService.route({
-
-							        		travelMode: google.maps.DirectionsTravelMode.DRIVING,
-							        		destination: { lat: posi[0], lng: posi[1] },
-											origin: { lat: position.coords.latitude, lng: position.coords.longitude }
-
-										}, function( response, status ) {
-
-											if( status == 'OK') {
-
-												directionsDisplay.setDirections( response );
-
-											} else {
-
-												window.alert('Directions request failed due to ' + status );
-											}
-
-										});
-
-
-							        });
-
-							    } else { 
-
-							        window.alert('Geolocation is not supported by this browser.');
-							    }
-
-
-
-							}
-
+							getLocation( pos );
 						};
 
 
-
-					})( marker, item, posi ));
-
-
-					items += '<div class="item" data-type="'+ res[i]['type'] +'">'+ item +'</div>';
+					})( marker, item, [res[i]['lat'], res[i]['lng']] ));
 				}
 			}
 
 
-			google.maps.event.addListenerOnce( map, 'idle', function() {
-
-
-			    document.getElementById('items').innerHTML = items;
-
-
-			    panel.style.display = 'block';
-
-				map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push( panel );
-			});
-
-
-
-
-
-
-			document.getElementById('selecttype').onchange = function() {
-
-
-				var items = document.getElementById('items').children;
-
-				for( i = 0; i < items.length; i++ ) {
-
-					if( this.value == items[i].dataset['type'] ) {
-
-						items[i].style.display = 'block';
-					
-					} else {
-
-						items[i].style.display = 'none';
-					}
-				}
-			}
-
-
-
+			loadPanel( map, items );
 		}
 
 	};
@@ -185,3 +96,101 @@ function init() {
 }
 
 
+
+
+function loadPanel( map, items ) {
+
+
+	google.maps.event.addListenerOnce( map, 'idle', function() {
+		
+		var panel = document.getElementById('panel');
+
+
+	    document.getElementById('items').innerHTML = items;
+
+
+	    panel.style.display = 'block';
+
+		map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push( panel );
+	});
+
+
+
+	document.getElementById('selecttype').onchange = function() {
+
+
+		var items = document.getElementById('items').children;
+
+		for( i = 0; i < items.length; i++ ) {
+
+			if( this.value == items[i].dataset['type'] ) {
+
+				items[i].style.display = 'block';
+			
+			} else {
+
+				items[i].style.display = 'none';
+			}
+		}
+	};
+}
+
+
+
+
+
+
+function getLocation( pos ) {
+
+
+	document.getElementById('getlocation').onclick = function() {
+
+
+	    if( navigator.geolocation ) {
+
+	        navigator.geolocation.getCurrentPosition( function( position ) {
+
+				var directionsDisplay = new google.maps.DirectionsRenderer;
+				var directionsService = new google.maps.DirectionsService;
+
+
+				var directionmap = new google.maps.Map( document.getElementById('map'), { 
+					zoom: 10, 
+					center: {lat: position.coords.latitude, lng: position.coords.longitude },
+					mapTypeId: google.maps.MapTypeId.terrain 
+				});
+
+				directionsDisplay.setMap( directionmap );
+
+
+	        	directionsService.route({
+
+	        		destination: { lat: pos[0], lng: pos[1] },
+	        		travelMode: google.maps.DirectionsTravelMode.DRIVING,
+					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
+
+				}, function( response, status ) {
+
+					if( status == 'OK') {
+
+						directionsDisplay.setDirections( response );
+
+					} else {
+
+						window.alert('Directions request failed due to ' + status );
+					}
+
+				});
+
+
+	        });
+
+	    } else { 
+
+	        window.alert('Geolocation is not supported by this browser.');
+	    }
+
+	}
+
+
+}
