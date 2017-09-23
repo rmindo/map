@@ -71,7 +71,10 @@ function init() {
 
 						return function() {
 
-							infowindow.setContent( '<div class="tip">'+ item + '<button id="getlocation">Get Direction</button></div>' );
+							var tip = '<div class="tip">'+ item + '<button id="getlocation">Get Direction</button></div>';
+
+
+							infowindow.setContent( tip );
 							infowindow.open( map, marker );
 
 							getLocation( pos );
@@ -81,7 +84,6 @@ function init() {
 					})( marker, item, [res[i]['lat'], res[i]['lng']] ));
 				}
 			}
-
 
 			loadPanel( map, items );
 		}
