@@ -12,20 +12,25 @@ body {
 
 /* Map */
 #map {
-	width: 100%;
-	height: 900px;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	position: fixed !important;
 	background-color: rgb(229, 227, 223);
 }
 #map p {
+	margin: 8px 0;
 	font-size: 13px;
 }
 #map h1 {
-	margin: 5px 0;
+	margin: 0 0 10px;
 }
 #map label {
-	padding-left: 5px;
-	font-weight: bold;
-	margin-right: 10px;
+	font-size: 12px;
+    cursor: pointer;
+    padding-left: 5px;
+    font-weight: bold;
 }
 #map header {
 	margin-bottom: 30px;
@@ -97,46 +102,61 @@ body {
 #panel h3 {
 	font-size: 16px;
 }
-#panel .label-0,
-#panel .type-0 {
-	border-left: 4px solid #fbba00;
-}
-#panel .label-1,
-#panel .type-1 {
-	border-left: 4px solid #9bb97f;
-}
-#panel .label-2,
-#panel .type-2 {
-	border-left: 4px solid #4798c7;
-}
-#panel .label-3,
-#panel .type-3 {
-	border-left: 4px solid #738390;
-}
-#panel .label-4,
-#panel .type-4 {
-	border-left: 4px solid #cea081;
-}
-#panel .label-5,
-#panel .type-5 {
-	border-left: 4px solid #ff875d;
-}
 #panel .field {
     float: left;
-    width: 125px;
+    width: 145px;
+    cursor: pointer;
 }
+#panel .field .color {
+	width: 8px;
+    height: 8px;
+    margin-right: 5px;
+    border-radius: 50px;
+    display: inline-block;
+}
+
+/* Items */
 #panel #items {
 	height: 500px;
 	overflow-y: scroll;
 	padding-right: 20px;
 }
 #panel #items .item {
+    padding: 10px;
 	margin: 10px 0;
-    padding: 10px 0 10px 15px;
-    border-top: 1px dashed #ddd;
-    border-right: 1px dashed #ddd;
-    border-bottom: 1px dashed #ddd;
+    border: 1px dashed #ddd;
 }
 #panel #items .item h3 {
 	margin: 0 0 5px;
+}
+#panel #items .item .color {
+	width: 12px;
+    height: 12px;
+    margin-right: 10px;
+    border-radius: 50px;
+    display: inline-block;
+}
+#panel .type-0 .color,
+#panel .label-0 .color {
+	background: #fbba00;
+}
+#panel .type-1 .color,
+#panel .label-1 .color {
+	background: #9bb97f;
+}
+#panel .type-2 .color,
+#panel .label-2 .color {
+	background: #4798c7;
+}
+#panel .type-3 .color,
+#panel .label-3 .color {
+	background: #738390;
+}
+#panel .type-4 .color,
+#panel .label-4 .color {
+	background: #cea081;
+}
+#panel .type-5 .color,
+#panel .label-5 .color {
+	background: #ff875d;
 }
