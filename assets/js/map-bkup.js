@@ -8,14 +8,15 @@ function init() {
 
 	    if( this.readyState == 4 && this.status == 200 ) {
 
-			var marker, item, res = JSON.parse( this.responseText );
+			var marker, item, resto = JSON.parse( this.responseText )['results'];
 
+			var center   = resto[0]['geometry']['location'];
 			var infobox  = new google.maps.InfoWindow();
-	        var location = new google.maps.LatLng( res[0]['lat'], res[0]['lng'] );
+	        var location = new google.maps.LatLng( center['lat'], center['lng'] );
 
 
 			var map = new google.maps.Map( document.getElementById('map'), {
-				zoom: 16,
+				zoom: 12,
 				center: location,
 				mapTypeId: google.maps.MapTypeId.terrain
 			});
@@ -26,7 +27,7 @@ function init() {
 				strokeWeight: 	1,
 				fillOpacity: 	0.1,
 				strokeOpacity: 	0.5,
-				radius: 		1000,
+				radius: 		7000,
 				editable: 		true,
 				draggable: 		true,
 				fillColor: 		'#ff0000',
@@ -36,36 +37,37 @@ function init() {
 
 
 
-
-
-
-
 	    	var items = '';
 
-			for( i = 0; i < res.length; i++ ) {
+			for( i = 0; i < resto.length; i++ ) {
 
-				var markerLocation = new google.maps.LatLng( res[i]['lat'], res[i]['lng'] );
+				var res = resto[i];
+				var geo = res['geometry']['location'];
+
+
+
+				var markerLocation = new google.maps.LatLng( geo['lat'], geo['lng'] );
 
 
 				marker = new google.maps.Marker({
 
 					map: map,
 					icon: new google.maps.MarkerImage( 'assets/images/icon.png', new google.maps.Size(32, 32) ),
-					position: new google.maps.LatLng( res[i]['lat'], res[i]['lng'] )
+					position: new google.maps.LatLng( geo['lat'], geo['lng'] )
 
 				});
 
 
 
-				if( res[i]['name'] ) {
+				if( res['name'] ) {
 
 
-					item = '<h3>' + res[i]['name'] + '</h3>'
+					item = '<h3>' + res['name'] + '</h3>'
 							+'<div class="meta">'
-							+'<i class="rate star-'+ res[i]['star'] +'"></i>'
-							+'<p><b>Visits: </b> '+ res[i]['visits'] +'/day</p>'
-							+'<p><b>Patrons: </b> '+ res[i]['patrons'] +'</p>'
-							+'<p><b>Specialty: </b> '+ res[i]['specialty'] +'</p>'
+							+'<i class="rate star-'+ Math.round( res['rating'] ) +'"></i>'
+							// +'<p><b>Visits: </b> '+ res[i]['visits'] +'/day</p>'
+							// +'<p><b>Patrons: </b> '+ res[i]['patrons'] +'</p>'
+							// +'<p><b>Specialty: </b> '+ res[i]['specialty'] +'</p>'
 							+'</div>';
 
 
@@ -84,7 +86,7 @@ function init() {
 						};
 
 
-					})( marker, item, [res[i]['lat'], res[i]['lng']] ));
+					})( marker, item, [geo['lat'], geo['lng']] ));
 
 
 
@@ -107,18 +109,18 @@ function init() {
 							    markers.push( restaurant );
 							}
 
-							console.log( markers.length );
+							console.log( markers );
 						};
 
 
 
-					})( res[i]['name'] )); 
+					})( res['name'] )); 
 
 
 
 
 
-					items += '<div class="item type-'+ res[i]['type'] +'">'+ item +'</div>';
+					items += '<div class="item clear type-'+ res['types'].length +'">'+ item +'</div>';
 				}
 			}
 
@@ -131,7 +133,7 @@ function init() {
 	};
 
 
-	http.open( 'GET', 'restaurants.json', true );
+	http.open( 'GET', 'http://www/navagis/api/restaurants?address=Cebu', true );
 
 	http.send();
 }
