@@ -56,6 +56,8 @@ function init() {
 
 				if( res[i]['name'] ) {
 
+					posi = [res[i]['lat'], res[i]['lng']];
+
 
 					item = '<h3>' + res[i]['name'] + '</h3>'
 							+'<div class="meta">'
@@ -66,7 +68,7 @@ function init() {
 							+'</div>';
 
 
-					google.maps.event.addListener( marker, 'click', ( function( marker, i, item ) {
+					google.maps.event.addListener( marker, 'click', ( function( marker, item, posi ) {
 
 
 						return function() {
@@ -75,7 +77,7 @@ function init() {
 							infowindow.open( map, marker );
 
 
-							document.getElementById('getlocation').onclick = function() {
+							document.getElementById('getlocation').onclick = function(e) {
 
 
 
@@ -86,17 +88,17 @@ function init() {
 										var directionsDisplay = new google.maps.DirectionsRenderer;
 										var directionsService = new google.maps.DirectionsService;
 
-console.log(res);
+
 							        	directionsService.route({
 
 							        		travelMode: google.maps.DirectionsTravelMode.DRIVING,
-							        		destination: { lat: res[i]['lat'], lng: res[i]['lng'] },
+							        		destination: { lat: posi[0], lng: posi[1] },
 											origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
 										}, function( response, status ) {
 
 											if( status == 'OK') {
-												
+
 										
 												directionsDisplay.setDirections( response );
 
@@ -123,7 +125,7 @@ console.log(res);
 
 
 
-					})( marker, i, item ));
+					})( marker, item, posi ));
 
 
 					items += '<div class="item" data-type="'+ res[i]['type'] +'">'+ item +'</div>';
