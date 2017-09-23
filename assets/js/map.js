@@ -169,7 +169,7 @@ function init() {
 	};
 
 
-	http.open( 'GET', 'http://www/navagis/api/restaurants?address=Cebu+City', true );
+	http.open( 'GET', 'restaurants.json', true );
 
 	http.send();
 
