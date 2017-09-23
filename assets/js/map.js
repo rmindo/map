@@ -88,7 +88,12 @@ function init() {
 										var directionsDisplay = new google.maps.DirectionsRenderer;
 										var directionsService = new google.maps.DirectionsService;
 
-										console.log(posi);
+
+										var directionmap = new google.maps.Map( mapID, { zoom: 13, center: {lat: 10.3068655, lng: 123.885036 }, mapTypeId: google.maps.MapTypeId.terrain });
+
+										directionsDisplay.setMap( directionmap );
+
+
 							        	directionsService.route({
 
 							        		travelMode: google.maps.DirectionsTravelMode.DRIVING,
