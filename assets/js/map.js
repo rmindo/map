@@ -88,7 +88,7 @@ function init() {
 
 							        	
 							        	directionsService.route({
-
+							        		travelMode: 'DRIVING',
 											origin: { lat: position.coords.latitude, lng: position.coords.longitude },
 											destination: {lat: res[i]['lat'], lng: res[i]['lng']},
 
