@@ -221,10 +221,12 @@ function getDirection( pos, items ) {
 
 					if( status == 'OK') {
 
+						directionsDisplay.setDirections( response );
+
+						
+
 
 						loadPanel( mapdirection, items );
-
-						directionsDisplay.setDirections( response );
 
 					} else {
 
