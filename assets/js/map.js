@@ -83,7 +83,7 @@ function load( map, resto ) {
 
 
 
-		google.maps.event.addListener( marker, 'click', ( function( marker, infobox, item, location ) {
+		google.maps.event.addListener( marker, 'click', ( function( marker, infobox, item, location, items ) {
 
 
 			return function() {
@@ -98,7 +98,7 @@ function load( map, resto ) {
 			};
 
 
-		})( marker, infobox, item, location ));
+		})( marker, infobox, item, location, items ));
 	}
 
 
@@ -222,9 +222,6 @@ function getDirection( pos, items ) {
 					if( status == 'OK') {
 
 						directionsDisplay.setDirections( response );
-
-						
-
 
 						loadPanel( mapdirection, items );
 
