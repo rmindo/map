@@ -9,10 +9,6 @@ function init() {
       	center: cebu
     });
 
-	map.setCenter( cebu );
-	map.setZoom(2);
-
-
     nearbySearch( map, cebu );
 }
 
@@ -324,8 +320,7 @@ function getDirection( place ) {
 
 				var map = new google.maps.Map( document.getElementById('map'), { 
 					zoom: 5, 
-					center: center,
-					mapTypeId: google.maps.MapTypeId.terrain 
+					center: center
 				});
 
 				display.setMap( map );
