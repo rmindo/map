@@ -61,9 +61,7 @@ function load( map, resto ) {
 
 	for( i = 0; i < resto.length; i++ ) {
 
-		var position = [resto[i]['lat'], resto[i]['lng']];
-
-		var markerPosition = new google.maps.LatLng( position[0], position[1] );
+		var markerPosition = new google.maps.LatLng( resto[i]['lat'], resto[i]['lng'] );
 
 
 		marker = new google.maps.Marker({
@@ -72,12 +70,13 @@ function load( map, resto ) {
 			position: markerPosition
 		});
 
-		item = restaurant( resto[i] );
 
-		items += '<div class="item type-'+ resto[i]['type'] +'">'+ item +'</div>';
+		item = '<div class="item type-'+ resto[i]['type'] +'">'+ restaurant( resto[i] ) +'</div>';
+
+		items += item;
 
 
-		windowBox( marker, infobox, item, position );
+		windowBox( marker, infobox, item, resto[i] );
 	}
 
 
@@ -216,6 +215,7 @@ function getDirection( pos ) {
 
 	    if( navigator.geolocation ) {
 
+
 	        navigator.geolocation.getCurrentPosition( function( position ) {
 
 				var directionsDisplay = new google.maps.DirectionsRenderer;
@@ -228,13 +228,22 @@ function getDirection( pos ) {
 					mapTypeId: google.maps.MapTypeId.terrain 
 				});
 
+			    var marker = new MarkerWithLabel({
+					position: new google.maps.LatLng( pos['lat'], pos['lng'] ),
+					map: mapdirection,
+					labelContent: pos['name'],
+					labelAnchor: new google.maps.Point(22, 0),
+			     });
+
+
+
 
 				directionsDisplay.setMap( mapdirection );
 
 
 	        	directionsService.route({
 
-	        		destination: { lat: pos[0], lng: pos[1] },
+	        		destination: { lat: pos['lat'], lng: pos['lng'] },
 	        		travelMode: google.maps.DirectionsTravelMode.DRIVING,
 					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
@@ -246,6 +255,8 @@ function getDirection( pos ) {
 
 							load( mapdirection, JSON.parse( data ) );
 						});
+
+
 
 						directionsDisplay.setDirections( response );
 
