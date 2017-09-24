@@ -200,7 +200,7 @@ function moveCircle( circle, markerPosition ) {
 
 
 
-function getDirection( pos, items ) {
+function getDirection( pos ) {
 
 
 	document.getElementById('getlocation').onclick = function() {
@@ -220,9 +220,6 @@ function getDirection( pos, items ) {
 					mapTypeId: google.maps.MapTypeId.terrain 
 				});
 
-				// console.log(pos);
-				loadPanel( mapdirection, items );
-
 
 				directionsDisplay.setMap( mapdirection );
 
@@ -236,6 +233,12 @@ function getDirection( pos, items ) {
 				}, function( response, status ) {
 
 					if( status == 'OK') {
+
+						
+						http( 'restaurants.json', function( data ) {
+
+							load( mapdirection, JSON.parse( data ) );
+						});
 
 						directionsDisplay.setDirections( response );
 
