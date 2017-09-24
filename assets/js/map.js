@@ -348,8 +348,8 @@ function getMarkers( data, types ) {
 /* Get Direction */
 function getDirection( place ) {
 
-	// .geometry.location
-	console.log(place);
+	var place = place.geometry.location
+	
 
 	document.getElementById('getlocation').onclick = function() {
 
@@ -375,7 +375,7 @@ function getDirection( place ) {
 
 		    	service.route({
 
-		    		destination: { lat: pos.lat, lng: pos.lng },
+		    		destination: { lat: place.lat(), lng: place.lng() },
 		    		travelMode: google.maps.DirectionsTravelMode.DRIVING,
 					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
