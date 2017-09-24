@@ -373,7 +373,7 @@ function getDirection( pos ) {
 
 		    	service.route({
 
-		    		destination: { lat: pos['lat'], lng: pos['lng'] },
+		    		destination: { lat: pos.lat, lng: pos.lng },
 		    		travelMode: google.maps.DirectionsTravelMode.DRIVING,
 					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
