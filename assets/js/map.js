@@ -10,6 +10,8 @@ function init() {
     });
 
     nearbySearch( map, cebu );
+
+
 }
 
 
@@ -50,32 +52,46 @@ function nearbySearch( map, position ) {
 	});
 
 
-
-    service.nearbySearch({ radius: 4000, location: position, type: ['restaurant'] }, function( results, status, pagination ) {
-
-
-	    if( status == google.maps.places.PlacesServiceStatus.OK ) {
+	var search = function( map, position ) {
 
 
-			createMarkers( map, results );
-
-			if( pagination.hasNextPage ) {
-
-				var more = document.getElementById('more');
-
-				more.disabled = false;
+	    service.nearbySearch({ radius: 4000, location: position, type: ['restaurant'] }, function( results, status, pagination ) {
 
 
-				more.addEventListener('click', function() {
+		    if( status == google.maps.places.PlacesServiceStatus.OK ) {
 
-					more.disabled = true;
 
-					pagination.nextPage();
+				createMarkers( map, results );
 
-				});
-			}
-	    }
+				if( pagination.hasNextPage ) {
+
+					var more = document.getElementById('more');
+
+					more.disabled = false;
+
+
+					more.addEventListener('click', function() {
+
+						more.disabled = true;
+
+						pagination.nextPage();
+
+					});
+
+				}
+		    }
+		});
+
+	};
+
+
+	google.maps.event.addListener( circle,'dragend', function( event ) {
+
+	    search( map, new google.maps.LatLng( event.latLng.lat(), event.latLng.lng() ) );
 	});
+
+
+	search( map, position );
 
 
 	loadPanel( map );
@@ -106,10 +122,13 @@ function createMarkers( map, places ) {
 			position: place.geometry.location
 		});
 
+
+
 		item = getItem( place );
 
 		items.innerHTML += item;
 
+	
 
 		windowBox( marker, infobox, item, place);
 	
