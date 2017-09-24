@@ -1,5 +1,5 @@
 
-function init() {
+function http( url, callback ) {
 
 	var http  = new XMLHttpRequest();
 
@@ -8,24 +8,34 @@ function init() {
 
 	    if( this.readyState == 4 && this.status == 200 ) {
 
-			var res = JSON.parse( this.responseText );
-
-			var map = new google.maps.Map( document.getElementById('map'), {
-				zoom: 15,
-				center: new google.maps.LatLng( res[0]['lat'], res[0]['lng'] ),
-				mapTypeId: google.maps.MapTypeId.terrain
-			});
-
-			load( map, res );
+			callback( this.responseText );
 		}
-
 	};
 
-	http.open( 'GET', 'restaurants.json', true );
+	http.open( 'GET', url, true );
 
 	http.send();
 }
 
+
+
+
+function init() {
+
+	http( 'restaurants.json', function( data ) {
+
+		var res = JSON.parse( data );
+
+		var map = new google.maps.Map( document.getElementById('map'), {
+			zoom: 15,
+			center: new google.maps.LatLng( res[0]['lat'], res[0]['lng'] ),
+			mapTypeId: google.maps.MapTypeId.terrain
+		});
+
+		load( map, res );
+	});
+
+}
 
 
 
@@ -116,47 +126,50 @@ function load( map, resto ) {
 
 function loadPanel( map, items ) {
 
-	var lists = document.getElementById('items');
+
+	http( 'panel.html', function( data ) {
+
+		var parser = new DOMParser();
+		var panel  = parser.parseFromString( data, 'text/html' ).body.firstChild;
 
 
-	google.maps.event.addListenerOnce( map, 'idle', function() {
+		google.maps.event.addListenerOnce( map, 'idle', function() {
+
+		    panel.children[1].innerHTML = items;
+
+		    panel.style.display = 'block';
+
+			map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push( panel );
+		});
+
+
+
 		
-		var panel = document.getElementById('panel');
+		for( var input in document.getElementsByTagName('input') ) {
+
+			document.getElementsByTagName('input')[input].onchange = function() {
 
 
-	    lists.innerHTML = items;
+				var list = document.getElementsByClassName( 'type-' + this.id );
 
 
-	    panel.style.display = 'block';
+				for( i = 0; i < list.length; i++ ) {
 
-		map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push( panel );
-	});
+					if( this.checked ) {
 
+						list[i].style.display = 'block';
 
+					} else {
 
-	
-	for( var input in document.getElementsByTagName('input') ) {
-
-		document.getElementsByTagName('input')[input].onchange = function() {
-
-
-			var list = document.getElementsByClassName( 'type-' + this.id );
-
-
-			for( i = 0; i < list.length; i++ ) {
-
-				if( this.checked ) {
-
-					list[i].style.display = 'block';
-
-				} else {
-
-					list[i].style.display = 'none';
+						list[i].style.display = 'none';
+					}
 				}
-			}
 
-		};
-	}
+			};
+		}
+
+	});
+	
 
 }
 
@@ -207,7 +220,7 @@ function getDirection( pos, items ) {
 					mapTypeId: google.maps.MapTypeId.terrain 
 				});
 
-				console.log(pos);
+				// console.log(pos);
 				loadPanel( mapdirection, items );
 
 
