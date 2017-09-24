@@ -5,7 +5,7 @@ function init() {
 	var cebu = new google.maps.LatLng( 10.31337, 123.9005348 );
 
     map = new google.maps.Map( document.getElementById('map'), {
-      	zoom: 2,
+      	zoom: 20,
       	center: cebu
     });
 
@@ -57,7 +57,7 @@ function nearbySearch( map, position ) {
 	    if( status == google.maps.places.PlacesServiceStatus.OK ) {
 
 
-			createMarkers( results );
+			createMarkers( map, results );
 
 			if( pagination.hasNextPage ) {
 
@@ -86,7 +86,7 @@ function nearbySearch( map, position ) {
 
 
 
-function createMarkers( places ) {
+function createMarkers( map, places ) {
 
 	var info = getRestaurantsInfo();
 	var infobox = new google.maps.InfoWindow();
@@ -94,7 +94,8 @@ function createMarkers( places ) {
 
 	var items = document.getElementById('items');
 
-	console.log( places );
+
+
 	for( var i = 0, place; place = places[i]; i++ ) {
 
 		place['info'] = info[i];
