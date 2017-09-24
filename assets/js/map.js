@@ -228,15 +228,6 @@ function getDirection( pos ) {
 					mapTypeId: google.maps.MapTypeId.terrain 
 				});
 
-			    var marker = new MarkerWithLabel({
-					position: new google.maps.LatLng( pos['lat'], pos['lng'] ),
-					map: mapdirection,
-					labelContent: pos['name'],
-					labelAnchor: new google.maps.Point(22, 0),
-			     });
-
-
-
 
 				directionsDisplay.setMap( mapdirection );
 
