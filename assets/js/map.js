@@ -32,27 +32,6 @@ function loadPanel( map ) {
 
 
 
-function clearMarkers() {
-	
-	setMapOnAll(null);
-}
-
-
-function setMapOnAll( map ) {
-
-	for( var i = 0; i < markers.length; i++) {
-
-		markers[i].setMap(map);
-	}
-}
-
-
-function deleteMarkers() {
-	clearMarkers();
-	markers = [];
-}
-
-
 
 function nearbySearch( map, position ) {
 
@@ -74,10 +53,10 @@ function nearbySearch( map, position ) {
 	});
 
 
-	var search = function( map, position ) {
+	var search = function( map, radius, position ) {
 
 
-	    service.nearbySearch({ radius: 2000, location: position, type: ['restaurant'] }, function( results, status, pagination ) {
+	    service.nearbySearch({ radius: radius, location: position, type: ['restaurant'] }, function( results, status, pagination ) {
 
 
 		    if( status == google.maps.places.PlacesServiceStatus.OK ) {
@@ -108,11 +87,11 @@ function nearbySearch( map, position ) {
 
 
 	google.maps.event.addListener( circle,'dragend', function( event ) {
-
-	    search( map, new google.maps.LatLng( event.latLng.lat(), event.latLng.lng() ) );
+		// console.log();
+	    search( map, this.radius, this.center );
 	});
 
-	search( map, circle.center );
+	search( map, circle.radius, circle.center );
 
 
 	loadPanel( map );
