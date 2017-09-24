@@ -13,11 +13,54 @@
 
 	<header id="header"></header>
 	<main>
+
 		<div id="map"></div>
+		<div id="panel">
+			<header class="clear">
+				
+				<h1>Restaurants</h1>
+
+				<form action="" method="POST" id="form">
+
+					<div class="field">
+						<input type="checkbox" name="type[]" id="0" checked onclick="select();">
+						<label class="label-0" for="0"><i class="color"></i> Casual dining</label>
+					</div>
+					<div class="field">
+						<input type="checkbox" name="type[]" id="1" checked>
+						<label class="label-1" for="1"><i class="color"></i> Fast food</label>
+					</div>
+					<div class="field">
+						<input type="checkbox" name="type[]" id="2" checked>
+						<label class="label-2" for="2"><i class="color"></i> Fast casual</label>
+					</div>
+					<div class="field">
+						<input type="checkbox" name="type[]" id="3" checked>
+						<label class="label-3" for="3"><i class="color"></i> Fine dining</label>
+					</div>
+					<div class="field">
+						<input type="checkbox" name="type[]" id="4" checked>
+						<label class="label-4" for="4"><i class="color"></i> Family dining</label>
+					</div>
+					<div class="field">
+						<input type="checkbox" name="type[]" id="5" checked>
+						<label class="label-5" for="5"><i class="color"></i> Ethnic</label>
+					</div>
+
+				</form>
+			</header>
+
+			<div id="items"></div>
+
+			<button id="more">More results</button>
+
+
+		</div>
+
 	</main>
 	<footer id="footer">
 		<script type="text/javascript" src="assets/js/map.js"></script>
-		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzymXsPqLMjVS3E5QYCr7ejvYNjXog6ZE&callback=init"></script>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzymXsPqLMjVS3E5QYCr7ejvYNjXog6ZE&callback=init&libraries=places"></script>
 	</footer>
 
 </body>
