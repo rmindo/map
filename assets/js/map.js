@@ -5,10 +5,13 @@ function init() {
 	var cebu = {lat: 10.31337, lng: 123.9005348};
 
     map = new google.maps.Map( document.getElementById('map'), {
-   		zoom: 2,
-      	center: cebu,
-      	mapTypeId: google.maps.MapTypeId.terrain
+      	zoom: 2,
+      	center: cebu
     });
+
+	map.setCenter( cebu );
+	map.setZoom(2);
+
 
     nearbySearch( map, cebu );
 }
@@ -338,9 +341,8 @@ function getDirection( place ) {
 
 					if( status == 'OK') {
 
-						loadPanel( map );
-
 						nearbySearch( map, center );
+
 
 						display.setDirections( response );
 
