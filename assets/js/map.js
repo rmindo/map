@@ -1,8 +1,26 @@
+/* Init */
+function init() {
 
+	http( 'restaurants.json', function( data ) {
+
+		var res = JSON.parse( data );
+
+		var map = new google.maps.Map( document.getElementById('map'), {
+			zoom: 15,
+			center: new google.maps.LatLng( res[0]['lat'], res[0]['lng'] ),
+			mapTypeId: google.maps.MapTypeId.terrain
+		});
+
+		load( map, res );
+	});
+}
+
+
+
+/* HTTP */
 function http( url, callback ) {
 
-	var http  = new XMLHttpRequest();
-
+	var http = new XMLHttpRequest();
 
 	http.onreadystatechange = function() {
 
@@ -19,28 +37,7 @@ function http( url, callback ) {
 
 
 
-
-function init() {
-
-	http( 'restaurants.json', function( data ) {
-
-		var res = JSON.parse( data );
-
-		var map = new google.maps.Map( document.getElementById('map'), {
-			zoom: 15,
-			center: new google.maps.LatLng( res[0]['lat'], res[0]['lng'] ),
-			mapTypeId: google.maps.MapTypeId.terrain
-		});
-
-		load( map, res );
-	});
-
-}
-
-
-
-
-
+/* Load */
 function load( map, resto ) {
 
 
@@ -62,8 +59,6 @@ function load( map, resto ) {
 	});
 
 
-
-
 	for( i = 0; i < resto.length; i++ ) {
 
 		var position = [resto[i]['lat'], resto[i]['lng']];
@@ -77,38 +72,12 @@ function load( map, resto ) {
 			position: markerPosition
 		});
 
-
-		item = '<h3><i class="color"></i>' + resto[i]['name'] + '</h3>'
-				+'<div class="meta">'
-				+'<i class="rate star-'+ resto[i]['star'] +'"></i>'
-				+'<p><b>Visits: </b> '+ resto[i]['visits'] +'/day</p>'
-				+'<p><b>Patrons: </b> '+ resto[i]['patrons'] +'</p>'
-				+'<p><b>Revenue: </b> PHP '+ resto[i]['revenue'].toLocaleString('en') +'/mo</p>'
-				+'<p><b>Specialty: </b> '+ resto[i]['specialty'] +'</p>'
-				+'</div>';
+		item = restaurant( resto[i] );
 
 		items += '<div class="item type-'+ resto[i]['type'] +'">'+ item +'</div>';
 
 
-
-
-
-		google.maps.event.addListener( marker, 'click', ( function( marker, infobox, item, position, items ) {
-
-
-			return function() {
-
-				var tip = '<div class="tip">'+ item + '<button id="getlocation">Get Direction</button></div>';
-
-
-				infobox.setContent( tip );
-				infobox.open( map, marker );
-
-				getDirection( position, items );
-			};
-
-
-		})( marker, infobox, item, position, items ));
+		windowBox( marker, infobox, item, position );
 	}
 
 
@@ -120,10 +89,50 @@ function load( map, resto ) {
 
 
 
+/* Restaurant */
+function restaurant( resto ) {
+
+
+	if( resto['name'] ) {
+
+		return '<h3><i class="color"></i>' + resto['name'] + '</h3>'
+				+'<div class="meta">'
+				+'<i class="rate star-'+ 	 resto['star'] +'"></i>'
+				+'<p><b>Visits: </b> '+ 	 resto['visits'] +'/day</p>'
+				+'<p><b>Patrons: </b> '+ 	 resto['patrons'] +'</p>'
+				+'<p><b>Revenue: </b> PHP '+ resto['revenue'].toLocaleString('en') +'/mo</p>'
+				+'<p><b>Specialty: </b> '+ 	 resto['specialty'] +'</p>'
+				+'</div>';
+	}
+}
+
+
+
+/* Info Box */
+function windowBox( marker, infobox, item, position ) {
+
+
+	google.maps.event.addListener( marker, 'click', ( function( marker, infobox, item, position ) {
+
+
+		return function() {
+
+			infobox.setContent( '<div class="tip">'+ item + '<button id="getlocation">Get Direction</button></div>' );
+
+			infobox.open( map, marker );
+
+			getDirection( position );
+		};
+
+
+	})( marker, infobox, item, position ));
+
+}
 
 
 
 
+/* Load Panel */
 function loadPanel( map, items ) {
 
 
@@ -170,13 +179,12 @@ function loadPanel( map, items ) {
 
 	});
 	
-
 }
 
 
 
 
-
+/* Movable Circle */
 function moveCircle( circle, markerPosition ) {
 
 
@@ -199,7 +207,7 @@ function moveCircle( circle, markerPosition ) {
 
 
 
-
+/* Get Direction */
 function getDirection( pos ) {
 
 
@@ -216,7 +224,7 @@ function getDirection( pos ) {
 
 				var mapdirection = new google.maps.Map( document.getElementById('map'), { 
 					zoom: 10, 
-					center: {lat: position.coords.latitude, lng: position.coords.longitude },
+					center: { lat: position.coords.latitude, lng: position.coords.longitude },
 					mapTypeId: google.maps.MapTypeId.terrain 
 				});
 
@@ -233,7 +241,6 @@ function getDirection( pos ) {
 				}, function( response, status ) {
 
 					if( status == 'OK') {
-
 
 						http( 'restaurants.json', function( data ) {
 
