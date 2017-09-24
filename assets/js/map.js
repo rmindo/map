@@ -52,7 +52,7 @@ function nearbySearch( map, position ) {
 
 
     service.nearbySearch({ radius: 4000, location: circle.getCenter(), type: ['restaurant'] }, function( results, status, pagination ) {
-
+console.log( status );
 
 	    if( status == google.maps.places.PlacesServiceStatus.OK ) {
 
@@ -74,12 +74,7 @@ function nearbySearch( map, position ) {
 
 				});
 			}
-
-	    } else {
-
-	    	console.log('No Results');
 	    }
-
 	});
 
 
