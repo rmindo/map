@@ -14,6 +14,21 @@ function init() {
 
 
 
+/* Load Panel */
+function loadPanel( map ) {
+
+	var panel = document.getElementById('panel');
+
+	google.maps.event.addListenerOnce( map, 'idle', function() {
+
+	    panel.style.display = 'block';
+	});
+
+	selectType( panel );
+}
+
+
+
 
 function nearbySearch( map, position ) {
 
@@ -36,7 +51,7 @@ function nearbySearch( map, position ) {
 
 
 
-    service.nearbySearch({ radius: 4000, location: position, type: ['restaurant'] }, function( results, status, pagination ) {
+    service.nearbySearch({ radius: 4000, location: circle.getCenter(), type: ['restaurant'] }, function( results, status, pagination ) {
 
 
 	    if( status == google.maps.places.PlacesServiceStatus.OK ) {
@@ -65,22 +80,6 @@ function nearbySearch( map, position ) {
 
 
 	loadPanel( map );
-}
-
-
-
-
-/* Load Panel */
-function loadPanel( map ) {
-
-	var panel = document.getElementById('panel');
-
-	google.maps.event.addListenerOnce( map, 'idle', function() {
-
-	    panel.style.display = 'block';
-	});
-
-	selectType( panel );
 }
 
 
@@ -264,6 +263,9 @@ function getDirection( place ) {
 
 				display.setMap( map );
 
+				nearbySearch( map, {lat: 10.31337, lng: 123.9005348} );
+
+
 
 		    	service.route({
 
@@ -274,9 +276,6 @@ function getDirection( place ) {
 				}, function( response, status ) {
 
 					if( status == 'OK') {
-
-						nearbySearch( map, {lat: 10.31337, lng: 123.9005348} );
-
 
 						display.setDirections( response );
 
