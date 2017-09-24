@@ -254,7 +254,7 @@ function getDirection( place ) {
 
 
 				var map = new google.maps.Map( document.getElementById('map'), { 
-					zoom: 5, 
+					zoom: 10, 
 					center: new google.maps.LatLng( 10.31337, 123.9005348 )
 				});
 
