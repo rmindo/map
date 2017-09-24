@@ -8,15 +8,15 @@ function init() {
 
 	    if( this.readyState == 4 && this.status == 200 ) {
 
-			var resto = JSON.parse( this.responseText );
+			var res = JSON.parse( this.responseText );
 
-			var googlemap = new google.maps.Map( document.getElementById('map'), {
+			var map = new google.maps.Map( document.getElementById('map'), {
 				zoom: 15,
-				center: new google.maps.LatLng( resto[0]['lat'], resto[0]['lng'] ),
+				center: new google.maps.LatLng( res[0]['lat'], res[0]['lng'] ),
 				mapTypeId: google.maps.MapTypeId.terrain
 			});
 
-			loadRestaurants( googlemap, resto );
+			load( map, res );
 		}
 
 	};
@@ -30,27 +30,85 @@ function init() {
 
 
 
-function infoBox( marker, infobox, item, location ) {
+
+function load( map, resto ) {
 
 
-	google.maps.event.addListener( marker, 'click', ( function( marker, infobox, item, location ) {
+	var item, marker, items = '';
 
 
-		return function() {
+	var infobox = new google.maps.InfoWindow();
+	var circle  = new google.maps.Circle({
+		map: 			map,
+		strokeWeight: 	1,
+		fillOpacity: 	0.1,
+		strokeOpacity: 	0.5,
+		radius: 		1000,
+		editable: 		true,
+		draggable: 		true,
+		fillColor: 		'#ff0000',
+		strokeColor: 	'#ff0000',
+		center: 		new google.maps.LatLng( resto[0]['lat'], resto[0]['lng'] ),
+	});
 
-			var tip = '<div class="tip">'+ item + '<button id="getlocation">Get Direction</button></div>';
 
 
-			infobox.setContent( tip );
-			infobox.open( map, marker );
 
-			getLocation( location );
-		};
+	for( i = 0; i < resto.length; i++ ) {
+
+		var position = [resto[i]['lat'], resto[i]['lng']];
+
+		var markerPosition = new google.maps.LatLng( position[0], position[1] );
 
 
-	})( marker, infobox, item, location ));
+		marker = new google.maps.Marker({
+			map: map,
+			icon: new google.maps.MarkerImage( 'assets/images/icon.png', new google.maps.Size(32, 32) ),
+			position: markerPosition
+		});
 
+
+		item = '<h3><i class="color"></i>' + resto[i]['name'] + '</h3>'
+				+'<div class="meta">'
+				+'<i class="rate star-'+ resto[i]['star'] +'"></i>'
+				+'<p><b>Visits: </b> '+ resto[i]['visits'] +'/day</p>'
+				+'<p><b>Patrons: </b> '+ resto[i]['patrons'] +'</p>'
+				+'<p><b>Revenue: </b> PHP '+ resto[i]['revenue'].toLocaleString('en') +'/mo</p>'
+				+'<p><b>Specialty: </b> '+ resto[i]['specialty'] +'</p>'
+				+'</div>';
+
+		items += '<div class="item type-'+ resto[i]['type'] +'">'+ item +'</div>';
+
+
+
+
+
+		google.maps.event.addListener( marker, 'click', ( function( marker, infobox, item, location ) {
+
+
+			return function() {
+
+				var tip = '<div class="tip">'+ item + '<button id="getlocation">Get Direction</button></div>';
+
+
+				infobox.setContent( tip );
+				infobox.open( map, marker );
+
+				getDirection( location, items );
+			};
+
+
+		})( marker, infobox, item, location ));
+	}
+
+
+	loadPanel( map, items );
+
+	moveCircle( circle, markerPosition );
 }
+
+
+
 
 
 
@@ -129,7 +187,7 @@ function moveCircle( circle, markerPosition ) {
 
 
 
-function getLocation( pos ) {
+function getDirection( location, items ) {
 
 
 	document.getElementById('getlocation').onclick = function() {
@@ -155,13 +213,16 @@ function getLocation( pos ) {
 
 	        	directionsService.route({
 
-	        		destination: { lat: pos[0], lng: pos[1] },
+	        		destination: { lat: location[0], lng: location[1] },
 	        		travelMode: google.maps.DirectionsTravelMode.DRIVING,
 					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
 				}, function( response, status ) {
 
 					if( status == 'OK') {
+
+
+						loadPanel( mapdirection, items );
 
 						directionsDisplay.setDirections( response );
 
@@ -181,67 +242,4 @@ function getLocation( pos ) {
 	    }
 
 	}
-}
-
-
-
-
-
-
-function loadRestaurants( googlemap, resto ) {
-
-
-	var item, marker, items = '';
-
-
-	var infobox = new google.maps.InfoWindow();
-	var circle  = new google.maps.Circle({
-		map: 			googlemap,
-		strokeWeight: 	1,
-		fillOpacity: 	0.1,
-		strokeOpacity: 	0.5,
-		radius: 		1000,
-		editable: 		true,
-		draggable: 		true,
-		fillColor: 		'#ff0000',
-		strokeColor: 	'#ff0000',
-		center: 		new google.maps.LatLng( resto[0]['lat'], resto[0]['lng'] ),
-	});
-
-
-
-
-	for( i = 0; i < resto.length; i++ ) {
-
-		var position = [resto[i]['lat'], resto[i]['lng']];
-
-		var markerPosition = new google.maps.LatLng( position[0], position[1] );
-
-
-		marker = new google.maps.Marker({
-			map: googlemap,
-			icon: new google.maps.MarkerImage( 'assets/images/icon.png', new google.maps.Size(32, 32) ),
-			position: markerPosition
-		});
-
-
-		item = '<h3><i class="color"></i>' + resto[i]['name'] + '</h3>'
-				+'<div class="meta">'
-				+'<i class="rate star-'+ resto[i]['star'] +'"></i>'
-				+'<p><b>Visits: </b> '+ resto[i]['visits'] +'/day</p>'
-				+'<p><b>Patrons: </b> '+ resto[i]['patrons'] +'</p>'
-				+'<p><b>Revenue: </b> PHP '+ resto[i]['revenue'].toLocaleString('en') +'/mo</p>'
-				+'<p><b>Specialty: </b> '+ resto[i]['specialty'] +'</p>'
-				+'</div>';
-
-		items += '<div class="item type-'+ resto[i]['type'] +'">'+ item +'</div>';
-
-
-
-		infoBox( marker, infobox, item, position );
-
-		moveCircle( circle, markerPosition );
-	}
-
-	loadPanel( googlemap, items );
 }

@@ -45,7 +45,7 @@ body {
 }
 #map .tip {
 	min-width: 110px;
-	min-height: 165px;
+	min-height: 185px;
 }
 #map .tip h3 {
 	display: block;
