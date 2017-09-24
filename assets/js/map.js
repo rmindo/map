@@ -90,7 +90,7 @@ function loadPanel( map ) {
 
 function createMarkers( places ) {
 
-	var info = restaurantsInfo();
+	var info = getRestaurantsInfo();
 	var infobox = new google.maps.InfoWindow();
 	var bounds  = new google.maps.LatLngBounds();
 
@@ -167,31 +167,6 @@ function windowBox( marker, infobox, item, place ) {
 
 
 
-
-
-/* HTTP */
-function http( url, callback ) {
-
-	var http = new XMLHttpRequest();
-
-	http.onreadystatechange = function() {
-
-	    if( this.readyState == 4 && this.status == 200 ) {
-
-			callback( this.responseText );
-		}
-	};
-
-	http.open( 'GET', url, true );
-
-	http.send();
-}
-
-
-
-
-
-
 /* Select Type */
 function selectType( panel ) {
 
@@ -220,40 +195,6 @@ function selectType( panel ) {
 	}
 }
 
-
-
-
-/* Movable Circle */
-function makeCircle( map, markers ) {
-
-
-	var circle = new google.maps.Circle({
-		map: 			map,
-		strokeWeight: 	1,
-		fillOpacity: 	0.1,
-		strokeOpacity: 	0.5,
-		radius: 		1000,
-		editable: 		true,
-		draggable: 		true,
-		fillColor: 		'#ff0000',
-		strokeColor: 	'#ff0000',
-		center: 		new google.maps.LatLng( markers[0]['lat'], markers[0]['lng'] ),
-	});
-
-
-	// google.maps.event.addListener( circle, 'center_changed', (function() {
-
-	// 	var marker = [markers[0]['lat'], markers[0]['lng']];
-
-
-	// 	var diff = google.maps.geometry.spherical.computeDistanceBetween( this.getCenter(), marker );
-
-
-	// 	if( this.getBounds().contains( marker ) && diff <= this.getRadius() ) {
-
-	// 	}
-	// })); 
-}
 
 
 
@@ -365,7 +306,7 @@ function getDirection( place ) {
 
 
 
-function restaurantsInfo() {
+function getRestaurantsInfo() {
 
 	return [
 
