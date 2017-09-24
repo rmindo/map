@@ -345,18 +345,6 @@ function getMarkers( data, types ) {
 
 
 
-
-/* Get Location */
-function getLocation() {
-
-
-			return { lat: position.coords.latitude, lng: position.coords.longitude };
-
-}
-
-
-
-
 /* Get Direction */
 function getDirection( pos ) {
 
