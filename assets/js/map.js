@@ -1,3 +1,6 @@
+var markers = [];
+
+
 
 function init() {
 
@@ -10,8 +13,6 @@ function init() {
     });
 
     nearbySearch( map, cebu );
-
-
 }
 
 
@@ -31,6 +32,27 @@ function loadPanel( map ) {
 
 
 
+function clearMarkers() {
+	
+	setMapOnAll(null);
+}
+
+
+function setMapOnAll( map ) {
+
+	for( var i = 0; i < markers.length; i++) {
+
+		markers[i].setMap(map);
+	}
+}
+
+
+function deleteMarkers() {
+	clearMarkers();
+	markers = [];
+}
+
+
 
 function nearbySearch( map, position ) {
 
@@ -43,7 +65,7 @@ function nearbySearch( map, position ) {
 		strokeWeight: 	1,
 		fillOpacity: 	0.1,
 		strokeOpacity: 	0.5,
-		radius: 		4000,
+		radius: 		2000,
 		editable: 		true,
 		draggable: 		true,
 		fillColor: 		'#ff0000',
@@ -55,7 +77,7 @@ function nearbySearch( map, position ) {
 	var search = function( map, position ) {
 
 
-	    service.nearbySearch({ radius: 4000, location: position, type: ['restaurant'] }, function( results, status, pagination ) {
+	    service.nearbySearch({ radius: 2000, location: position, type: ['restaurant'] }, function( results, status, pagination ) {
 
 
 		    if( status == google.maps.places.PlacesServiceStatus.OK ) {
@@ -90,8 +112,7 @@ function nearbySearch( map, position ) {
 	    search( map, new google.maps.LatLng( event.latLng.lat(), event.latLng.lng() ) );
 	});
 
-
-	search( map, position );
+	search( map, circle.center );
 
 
 	loadPanel( map );
@@ -100,9 +121,25 @@ function nearbySearch( map, position ) {
 
 
 
+function addMarker( map, location ) {
+
+    var marker = new google.maps.Marker({
+		position: location,
+		map: map,
+		icon: new google.maps.MarkerImage( 'assets/images/icon.png', new google.maps.Size(32, 32) ),
+    });
+
+    markers.push(marker);
+
+    return marker;
+}
+
+
+
 
 
 function createMarkers( map, places ) {
+
 
 	var info = getRestaurantsInfo();
 	var infobox = new google.maps.InfoWindow();
@@ -116,24 +153,21 @@ function createMarkers( map, places ) {
 
 		place['info'] = info[i];
 
-		var marker = new google.maps.Marker({
-			map: map,
-			icon: new google.maps.MarkerImage( 'assets/images/icon.png', new google.maps.Size(32, 32) ),
-			position: place.geometry.location
-		});
+
+		marker = addMarker( map, place.geometry.location );
 
 
+		items.innerHTML += getItem( place );
 
-		item = getItem( place );
-
-		items.innerHTML += item;
-
-	
 
 		windowBox( marker, infobox, item, place);
 	
 		bounds.extend( place.geometry.location );
 	}
+
+	document.getElementById('counter').innerHTML = markers.length;
+
+
 
 
 	map.fitBounds(bounds);
@@ -153,6 +187,8 @@ function getItem( place ) {
 				+'<i class="rate star-'+ 	 place.info['star'] +'"></i>'
 				+'<p><b>Visits: </b> '+ 	 place.info['visits'] +'/day</p>'
 				+'<p><b>Patrons: </b> '+ 	 place.info['patrons'] +'</p>'
+				+'<p><b>Reserved: </b> '+ 	 place.info['reserved'] +'</p>'
+				+'<p><b>Transactions: </b>'+ place.info['transactions'] +'</p>'
 				+'<p><b>Revenue: </b> PHP '+ place.info['revenue'].toLocaleString('en') +'/mo</p>'
 				+'<p><b>Specialty: </b> '+ 	 place.info['specialty'] +'</p>'
 				+'</div>';
@@ -324,14 +360,15 @@ function getDirection( place ) {
 function getRestaurantsInfo() {
 
 	return [
-
 	    {
 	        "specialty": "Lamb Salad with Fregola",
 	        "revenue": 634202,
 	        "star": 4,
 	        "patrons": 70,
 	        "visits": 90,
-	        "type": 1
+	        "type": 1,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Smoked Pork Jowl with Pickles",
@@ -339,7 +376,9 @@ function getRestaurantsInfo() {
 	        "star": 5,
 	        "patrons": 99,
 	        "visits": 128,
-	        "type": 2
+	        "type": 2,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Scallop Sashimi with Meyer Lemon Confit",
@@ -347,7 +386,9 @@ function getRestaurantsInfo() {
 	        "star": 3,
 	        "patrons": 20,
 	        "visits": 70,
-	        "type": 5
+	        "type": 5,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Vegan Charcuterie",
@@ -355,7 +396,9 @@ function getRestaurantsInfo() {
 	        "star": 4,
 	        "patrons": 40,
 	        "visits": 98,
-	        "type": 3
+	        "type": 3,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Pappardelle with Sea Urchin and Cauliflower",
@@ -363,7 +406,9 @@ function getRestaurantsInfo() {
 	        "star": 3,
 	        "patrons": 30,
 	        "visits": 80,
-	        "type": 4
+	        "type": 4,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Pork Rillette Hand Pies",
@@ -371,7 +416,9 @@ function getRestaurantsInfo() {
 	        "star": 3,
 	        "patrons": 60,
 	        "visits": 60,
-	        "type": 1
+	        "type": 1,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Malted Custard French Toast",
@@ -379,7 +426,9 @@ function getRestaurantsInfo() {
 	        "star": 4,
 	        "patrons": 115,
 	        "visits": 160,
-	        "type": 0
+	        "type": 0,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Pizza Puff",
@@ -387,7 +436,9 @@ function getRestaurantsInfo() {
 	        "star": 5,
 	        "patrons": 125,
 	        "visits": 140,
-	        "type": 5
+	        "type": 5,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Island Duck with Mulberry Mustard",
@@ -395,7 +446,9 @@ function getRestaurantsInfo() {
 	        "star": 5,
 	        "patrons": 110,
 	        "visits": 130,
-	        "type": 2
+	        "type": 2,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Pasta with Lamb Ragù",
@@ -403,7 +456,9 @@ function getRestaurantsInfo() {
 	        "star": 3,
 	        "patrons": 58,
 	        "visits": 80,
-	        "type": 4
+	        "type": 4,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Cheeseburger",
@@ -411,7 +466,9 @@ function getRestaurantsInfo() {
 	        "star": 2,
 	        "patrons": 21,
 	        "visits": 50,
-	        "type": 3
+	        "type": 3,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Chorizo-stuffed Medjool Dates",
@@ -419,15 +476,19 @@ function getRestaurantsInfo() {
 	        "star": 4,
 	        "patrons": 96,
 	        "visits": 112,
-	        "type": 1
+	        "type": 1,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
-		{
+	    {
 	        "specialty": "Smoked Salmon",
 	        "revenue": 634202,
 	        "star": 5,
 	        "patrons": 101,
 	        "visits": 120,
-	        "type": 5
+	        "type": 5,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Atomica",
@@ -435,7 +496,9 @@ function getRestaurantsInfo() {
 	        "star": 3,
 	        "patrons": 78,
 	        "visits": 87,
-	        "type": 2
+	        "type": 2,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Seoul Sassy Fried Chicken",
@@ -443,7 +506,9 @@ function getRestaurantsInfo() {
 	        "star": 3,
 	        "patrons": 67,
 	        "visits": 80,
-	        "type": 5
+	        "type": 5,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Cheesecake",
@@ -451,7 +516,9 @@ function getRestaurantsInfo() {
 	        "star": 1,
 	        "patrons": 10,
 	        "visits": 120,
-	        "type": 0
+	        "type": 0,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Garrett Mix",
@@ -459,7 +526,9 @@ function getRestaurantsInfo() {
 	        "star": 4,
 	        "patrons": 60,
 	        "visits": 100,
-	        "type": 4
+	        "type": 4,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Broiled T-Bone Steak",
@@ -467,7 +536,9 @@ function getRestaurantsInfo() {
 	        "star": 3,
 	        "patrons": 40,
 	        "visits": 90,
-	        "type": 2
+	        "type": 2,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Depression Dog",
@@ -475,7 +546,9 @@ function getRestaurantsInfo() {
 	        "star": 4,
 	        "patrons": 80,
 	        "visits": 123,
-	        "type": 0
+	        "type": 0,
+	        "reserved": 32,
+	        "transactions": 2346
 	    },
 	    {
 	        "specialty": "Roasted Pig Face",
@@ -483,7 +556,9 @@ function getRestaurantsInfo() {
 	        "star": 5,
 	        "patrons": 100,
 	        "visits": 145,
-	        "type": 3
+	        "type": 3,
+	        "reserved": 32,
+	        "transactions": 2346
 	    }
 	];
 

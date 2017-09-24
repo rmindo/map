@@ -81,7 +81,7 @@ button:disabled {
 
 #map .tip {
 	min-width: 110px;
-	min-height: 185px;
+	min-height: 235px;
 }
 #map .tip h3 {
 	display: block;
@@ -170,4 +170,17 @@ button:disabled {
 #panel .type-5 .color,
 #panel .label-5 .color {
 	background: #ff875d;
+}
+
+
+#counter {
+    left: 0;
+    right: 0;
+    top: 20px;
+    width: 100px;
+    z-index: 9990;
+    margin: auto;
+    font-size: 40px;
+    text-align: center;
+    position: absolute;
 }
