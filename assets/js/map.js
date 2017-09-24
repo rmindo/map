@@ -352,18 +352,7 @@ function getMarkers( data, types ) {
 function getLocation() {
 
 
-    if( navigator.geolocation ) {
-
-
-        navigator.geolocation.getCurrentPosition( function( position ) {
-
 			return { lat: position.coords.latitude, lng: position.coords.longitude };
-        });
-
-    } else { 
-
-        window.alert('Geo location is not supported by this browser.');
-    }
 
 }
 
@@ -376,49 +365,57 @@ function getDirection( pos ) {
 
 	document.getElementById('getlocation').onclick = function() {
 
-	    var position = getLocation();
+
+	    if( navigator.geolocation ) {
 
 
-	    if( position ) {
-
-			var display = new google.maps.DirectionsRenderer;
-			var service = new google.maps.DirectionsService;
+	        navigator.geolocation.getCurrentPosition( function( position ) {
 
 
-			var mapdirection = new google.maps.Map( document.getElementById('map'), { 
-				zoom: 10, 
-				center: { lat: position.coords.latitude, lng: position.coords.longitude },
-				mapTypeId: google.maps.MapTypeId.terrain 
-			});
-
-			display.setMap( mapdirection );
+				var display = new google.maps.DirectionsRenderer;
+				var service = new google.maps.DirectionsService;
 
 
-	    	service.route({
+				var mapdirection = new google.maps.Map( document.getElementById('map'), { 
+					zoom: 10, 
+					center: { lat: position.coords.latitude, lng: position.coords.longitude },
+					mapTypeId: google.maps.MapTypeId.terrain 
+				});
 
-	    		destination: { lat: pos['lat'], lng: pos['lng'] },
-	    		travelMode: google.maps.DirectionsTravelMode.DRIVING,
-				origin: { lat: position.coords.latitude, lng: position.coords.longitude }
+				display.setMap( mapdirection );
 
-			}, function( response, status ) {
 
-				if( status == 'OK') {
+		    	service.route({
 
-					http( 'restaurants.json', function( data ) {
+		    		destination: { lat: pos['lat'], lng: pos['lng'] },
+		    		travelMode: google.maps.DirectionsTravelMode.DRIVING,
+					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
-						load( mapdirection, JSON.parse( data ) );
-					});
+				}, function( response, status ) {
 
-					display.setDirections( response );
+					if( status == 'OK') {
 
-				} else {
+						http( 'restaurants.json', function( data ) {
 
-					window.alert('Directions request failed due to ' + status );
-				}
+							load( mapdirection, JSON.parse( data ) );
+						});
 
-			});
+						display.setDirections( response );
 
-		}
+					} else {
+
+						window.alert('Directions request failed due to ' + status );
+					}
+
+				});
+
+	        });
+
+	    } else { 
+
+	        window.alert('Geo location is not supported by this browser.');
+	    }
+
 
 
 	}
