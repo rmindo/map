@@ -207,7 +207,7 @@ function getDirection( pos, items ) {
 					mapTypeId: google.maps.MapTypeId.terrain 
 				});
 
-
+				console.log(items);
 				loadPanel( mapdirection, items );
 
 
