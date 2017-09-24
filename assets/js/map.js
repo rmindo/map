@@ -2,7 +2,7 @@
 function init() {
 
 
-	var cebu = {lat: 10.31337, lng: 123.9005348};
+	var cebu = new google.maps.LatLng( 10.31337, 123.9005348 );
 
     map = new google.maps.Map( document.getElementById('map'), {
       	zoom: 2,
@@ -74,6 +74,10 @@ function nearbySearch( map, position ) {
 
 				});
 			}
+
+	    } else {
+
+	    	console.log('No Results');
 	    }
 
 	});
