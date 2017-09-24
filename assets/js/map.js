@@ -318,7 +318,7 @@ function getDirection( place ) {
 
 
 				var map = new google.maps.Map( document.getElementById('map'), { 
-					zoom: 10, 
+					zoom: 5, 
 					center: { lat: position.coords.latitude, lng: position.coords.longitude },
 					mapTypeId: google.maps.MapTypeId.terrain 
 				});
