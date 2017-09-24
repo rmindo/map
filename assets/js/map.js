@@ -249,9 +249,6 @@ function getDirection( place ) {
 
 	    if( navigator.geolocation ) {
 
-	    	var destination = { lat: place.lat(), lng: place.lng() };
-
-
 
 	        navigator.geolocation.getCurrentPosition( function( position ) {
 
@@ -273,7 +270,7 @@ function getDirection( place ) {
 
 		    	service.route({
 
-		    		destination: destination,
+		    		destination: { lat: place.lat(), lng: place.lng() },
 		    		travelMode: google.maps.DirectionsTravelMode.DRIVING,
 					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
