@@ -208,6 +208,9 @@ function getDirection( pos, items ) {
 				});
 
 
+				loadPanel( mapdirection, items );
+
+
 				directionsDisplay.setMap( mapdirection );
 
 
@@ -222,8 +225,6 @@ function getDirection( pos, items ) {
 					if( status == 'OK') {
 
 						directionsDisplay.setDirections( response );
-
-						loadPanel( mapdirection, items );
 
 					} else {
 
