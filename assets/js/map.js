@@ -144,33 +144,28 @@ function loadPanel( map, items ) {
 
 
 
-		for( var input in panel.firstElementChild.lastElementChild.elements ) {
+		for( input = 0; input < 6; input++ ) {
 
 
-			if( parseInt( Number( input ) ) ) {
+			panel.firstElementChild.lastElementChild[input].onchange = function() {
 
 
-
-				panel.firstElementChild.lastElementChild[input].onchange = function() {
-
-
-					var list = document.getElementsByClassName( 'type-' + this.id );
+				var list = document.getElementsByClassName( 'type-' + this.id );
 
 
-					for( i = 0; i < list.length; i++ ) {
+				for( i = 0; i < list.length; i++ ) {
 
-						if( this.checked ) {
+					if( this.checked ) {
 
-							list[i].style.display = 'block';
+						list[i].style.display = 'block';
 
-						} else {
+					} else {
 
-							list[i].style.display = 'none';
-						}
+						list[i].style.display = 'none';
 					}
+				}
 
-				};
-			}
+			};
 		}
 
 	});
