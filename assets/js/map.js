@@ -5,7 +5,7 @@ function init() {
 	var cebu = {lat: 10.31337, lng: 123.9005348};
 
     map = new google.maps.Map( document.getElementById('map'), {
-   		zoom: 5,
+   		zoom: 2,
       	center: cebu,
       	mapTypeId: google.maps.MapTypeId.terrain
     });
@@ -56,6 +56,23 @@ function init() {
 
 	loadPanel( map );
 }
+
+
+
+
+/* Load Panel */
+function loadPanel( map ) {
+
+	var panel = document.getElementById('panel');
+
+	google.maps.event.addListenerOnce( map, 'idle', function() {
+
+	    panel.style.display = 'block';
+	});
+
+	selectType( panel );
+}
+
 
 
 
@@ -140,26 +157,6 @@ function windowBox( marker, infobox, item, place ) {
 
 
 
-/* Load Panel */
-function loadPanel( map ) {
-
-
-	var panel = document.getElementById('panel');
-
-	google.maps.event.addListenerOnce( map, 'idle', function() {
-
-	    panel.style.display = 'block';
-
-		map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push( panel );
-	});
-
-	selectType( panel );
-
-}
-
-
-
-
 
 
 /* HTTP */
@@ -178,64 +175,6 @@ function http( url, callback ) {
 	http.open( 'GET', url, true );
 
 	http.send();
-}
-
-
-
-/* Load */
-function select() {
-
-}
-
-
-
-
-/* Load */
-// function load( map, data ) {
-
-// 	var infoBox = new google.maps.InfoWindow();
-
-// 	var markers = makeMarker( map, data, [1,2], function( marker, resto ) {
-
-// 		item = getItem( resto );
-
-// 		windowBox( marker, infoBox, item, resto );
-
-// 		return item;
-// 	});
-
-// 	makeCircle( map, markers );
-// }
-
-
-
-
-
-
-
-/* Load Panel */
-function makeMarker( map, data, types, callback ) {
-
-	var items = '';
-
-	var markers = getMarkers( data, types );
-
-
-	for( i = 0; i < markers.length; i++ ) {
-
-		marker = new google.maps.Marker({
-			map: map,
-			icon: new google.maps.MarkerImage( 'assets/images/icon.png', new google.maps.Size(32, 32) ),
-			position: new google.maps.LatLng( markers[i]['lat'], markers[i]['lng'] )
-		});
-		
-		items += callback( marker, markers[i] );
-	}
-
-	loadPanel( map, items );
-
-
-	return markers;
 }
 
 
@@ -364,7 +303,7 @@ function getDirection( place ) {
 				var service = new google.maps.DirectionsService;
 
 
-				var mapdirection = new google.maps.Map( document.getElementById('map'), { 
+				var map = new google.maps.Map( document.getElementById('map'), { 
 					zoom: 10, 
 					center: { lat: position.coords.latitude, lng: position.coords.longitude },
 					mapTypeId: google.maps.MapTypeId.terrain 
@@ -383,10 +322,7 @@ function getDirection( place ) {
 
 					if( status == 'OK') {
 
-						http( 'restaurants.json', function( data ) {
-
-							load( mapdirection, JSON.parse( data ) );
-						});
+						loadPanel( map );
 
 						display.setDirections( response );
 
