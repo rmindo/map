@@ -262,12 +262,12 @@ function getDirection( place ) {
 
 				var map = new google.maps.Map( document.getElementById('map'), { 
 					zoom: 5, 
-					center: {lat: 10.31337, lng: 123.9005348}
+					center: new google.maps.LatLng( 10.31337, 123.9005348 )
 				});
 
 				display.setMap( map );
 
-				nearbySearch( map, {lat: 10.31337, lng: 123.9005348} );
+				nearbySearch( map, new google.maps.LatLng( 10.31337, 123.9005348 ) );
 
 
 
