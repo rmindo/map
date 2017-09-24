@@ -83,7 +83,7 @@ function load( map, resto ) {
 
 
 
-		google.maps.event.addListener( marker, 'click', ( function( marker, infobox, item, location, items ) {
+		google.maps.event.addListener( marker, 'click', ( function( marker, infobox, item, position, items ) {
 
 
 			return function() {
@@ -94,11 +94,11 @@ function load( map, resto ) {
 				infobox.setContent( tip );
 				infobox.open( map, marker );
 
-				getDirection( location, items );
+				getDirection( position, items );
 			};
 
 
-		})( marker, infobox, item, location, items ));
+		})( marker, infobox, item, position, items ));
 	}
 
 
