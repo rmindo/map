@@ -10,9 +10,17 @@ function init() {
       	mapTypeId: google.maps.MapTypeId.terrain
     });
 
+    nearbySearch( map, cebu );
+}
+
+
+
+
+function nearbySearch( map, position ) {
+
+
+
     var service = new google.maps.places.PlacesService( map );
-
-
 
 	var circle = new google.maps.Circle({
 		map: 			map,
@@ -24,11 +32,12 @@ function init() {
 		draggable: 		true,
 		fillColor: 		'#ff0000',
 		strokeColor: 	'#ff0000',
-		center: 		cebu
+		center: 		position
 	});
 
 
-    service.nearbySearch({ radius: 4000, location: cebu, type: ['restaurant'] }, function( results, status, pagination ) {
+
+    service.nearbySearch({ radius: 4000, location: position, type: ['restaurant'] }, function( results, status, pagination ) {
 
 
 	    if( status == google.maps.places.PlacesServiceStatus.OK ) {
@@ -38,15 +47,17 @@ function init() {
 
 			if( pagination.hasNextPage ) {
 
-				var moreButton = document.getElementById('more');
+				var more = document.getElementById('more');
 
-				moreButton.disabled = false;
+				more.disabled = false;
 
-				moreButton.addEventListener('click', function() {
 
-					moreButton.disabled = true;
+				more.addEventListener('click', function() {
+
+					more.disabled = true;
 
 					pagination.nextPage();
+
 				});
 			}
 	    }
@@ -295,6 +306,9 @@ function getDirection( place ) {
 
 	    if( navigator.geolocation ) {
 
+	    	var destination = { lat: place.lat(), lng: place.lng() };
+
+
 
 	        navigator.geolocation.getCurrentPosition( function( position ) {
 
@@ -314,7 +328,7 @@ function getDirection( place ) {
 
 		    	service.route({
 
-		    		destination: { lat: place.lat(), lng: place.lng() },
+		    		destination: destination,
 		    		travelMode: google.maps.DirectionsTravelMode.DRIVING,
 					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
@@ -323,6 +337,8 @@ function getDirection( place ) {
 					if( status == 'OK') {
 
 						loadPanel( map );
+
+						nearbySearch( map, destination );
 
 						display.setDirections( response );
 
