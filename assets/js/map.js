@@ -51,8 +51,8 @@ function nearbySearch( map, position ) {
 
 
 
-    service.nearbySearch({ radius: 4000, location: circle.getCenter(), type: ['restaurant'] }, function( results, status, pagination ) {
-console.log( status );
+    service.nearbySearch({ radius: 4000, location: position, type: ['restaurant'] }, function( results, status, pagination ) {
+
 
 	    if( status == google.maps.places.PlacesServiceStatus.OK ) {
 
@@ -94,7 +94,7 @@ function createMarkers( places ) {
 
 	var items = document.getElementById('items');
 
-	
+	console.log( places );
 	for( var i = 0, place; place = places[i]; i++ ) {
 
 		place['info'] = info[i];
