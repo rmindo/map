@@ -144,28 +144,33 @@ function loadPanel( map, items ) {
 
 
 
-		
-		for( var input in document.getElementsByTagName('input') ) {
-
-			document.getElementsByTagName('input')[input].onchange = function() {
+		for( var input in panel.firstElementChild.lastElementChild.elements ) {
 
 
-				var list = document.getElementsByClassName( 'type-' + this.id );
+			if( parseInt( Number( input ) ) ) {
 
 
-				for( i = 0; i < list.length; i++ ) {
 
-					if( this.checked ) {
+				panel.firstElementChild.lastElementChild[input].onchange = function() {
 
-						list[i].style.display = 'block';
 
-					} else {
+					var list = document.getElementsByClassName( 'type-' + this.id );
 
-						list[i].style.display = 'none';
+
+					for( i = 0; i < list.length; i++ ) {
+
+						if( this.checked ) {
+
+							list[i].style.display = 'block';
+
+						} else {
+
+							list[i].style.display = 'none';
+						}
 					}
-				}
 
-			};
+				};
+			}
 		}
 
 	});
@@ -234,7 +239,7 @@ function getDirection( pos ) {
 
 					if( status == 'OK') {
 
-						
+
 						http( 'restaurants.json', function( data ) {
 
 							load( mapdirection, JSON.parse( data ) );
