@@ -317,9 +317,11 @@ function getDirection( place ) {
 				var service = new google.maps.DirectionsService;
 
 
+				var center = { lat: position.coords.latitude, lng: position.coords.longitude };
+
 				var map = new google.maps.Map( document.getElementById('map'), { 
 					zoom: 5, 
-					center: { lat: position.coords.latitude, lng: position.coords.longitude },
+					center: center,
 					mapTypeId: google.maps.MapTypeId.terrain 
 				});
 
@@ -330,7 +332,7 @@ function getDirection( place ) {
 
 		    		destination: destination,
 		    		travelMode: google.maps.DirectionsTravelMode.DRIVING,
-					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
+					origin: center
 
 				}, function( response, status ) {
 
@@ -338,7 +340,7 @@ function getDirection( place ) {
 
 						loadPanel( map );
 
-						nearbySearch( map, destination );
+						nearbySearch( map, center );
 
 						display.setDirections( response );
 
