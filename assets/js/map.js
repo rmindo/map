@@ -2,8 +2,6 @@
 function init() {
 
 
-	var loc = getLocation();
-console.log(loc);
 	var cebu = {lat: 10.31337, lng: 123.9005348};
 
     map = new google.maps.Map( document.getElementById('map'), {
