@@ -187,7 +187,7 @@ function moveCircle( circle, markerPosition ) {
 
 
 
-function getDirection( location, items ) {
+function getDirection( pos, items ) {
 
 
 	document.getElementById('getlocation').onclick = function() {
@@ -213,7 +213,7 @@ function getDirection( location, items ) {
 
 	        	directionsService.route({
 
-	        		destination: { lat: location[0], lng: location[1] },
+	        		destination: { lat: pos[0], lng: pos[1] },
 	        		travelMode: google.maps.DirectionsTravelMode.DRIVING,
 					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
