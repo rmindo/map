@@ -309,7 +309,7 @@ function getDirection( place ) {
 					mapTypeId: google.maps.MapTypeId.terrain 
 				});
 
-				display.setMap( mapdirection );
+				display.setMap( map );
 
 
 		    	service.route({
