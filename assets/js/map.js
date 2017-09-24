@@ -347,7 +347,7 @@ function getMarkers( data, types ) {
 
 /* Get Direction */
 function getDirection( pos ) {
-
+	console.log(pos);
 
 	document.getElementById('getlocation').onclick = function() {
 
