@@ -245,6 +245,8 @@ function getDirection( place ) {
 
 	    if( navigator.geolocation ) {
 
+	    	var destination = new google.maps.LatLng( place.lat(), place.lng() );
+
 
 	        navigator.geolocation.getCurrentPosition( function( position ) {
 
@@ -255,18 +257,18 @@ function getDirection( place ) {
 
 				var map = new google.maps.Map( document.getElementById('map'), { 
 					zoom: 10, 
-					center: new google.maps.LatLng( 10.31337, 123.9005348 )
+					center: destination
 				});
 
 				display.setMap( map );
 
-				nearbySearch( map, new google.maps.LatLng( 10.31337, 123.9005348 ) );
+				nearbySearch( map, destination );
 
 
 
 		    	service.route({
 
-		    		destination: { lat: place.lat(), lng: place.lng() },
+		    		destination: destination,
 		    		travelMode: google.maps.DirectionsTravelMode.DRIVING,
 					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
