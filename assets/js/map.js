@@ -131,7 +131,7 @@ function windowBox( marker, infobox, item, place ) {
 
 		infobox.open( map, marker );
 
-		getDirection( place.geometry.location );
+		getDirection( place );
 	});
 
 }
@@ -346,8 +346,10 @@ function getMarkers( data, types ) {
 
 
 /* Get Direction */
-function getDirection( pos ) {
-	console.log(pos);
+function getDirection( place ) {
+
+	// .geometry.location
+	console.log(place);
 
 	document.getElementById('getlocation').onclick = function() {
 
