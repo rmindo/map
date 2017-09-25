@@ -4,100 +4,43 @@ var markers = [];
 /* Initialize */
 function init() {
 
+    search( new google.maps.Map( document.getElementById('map'), {
 
-	var cebu = new google.maps.LatLng( 10.31337, 123.9005348 );
+      	center: new google.maps.LatLng( 10.31337, 123.9005348 )
 
-    map = new google.maps.Map( document.getElementById('map'), {
-      	zoom: 20,
-      	center: cebu
-    });
-
-    textSearch( map, cebu );
+    }));
 }
 
 
 
-/* Load Panel */
-function loadPanel( map ) {
+/* Search */
+function search( map ) {
 
-	var panel = document.getElementById('panel');
-
-	google.maps.event.addListenerOnce( map, 'idle', function() {
-
-	    panel.style.display = 'block';
-	});
-
-	selectType( panel );
-}
-
-
-
-/* Text Search */
-function textSearch( map, position ) {
-
-
-
-    var service = new google.maps.places.PlacesService( map );
 
 	var circle = new google.maps.Circle({
 		map: 			map,
 		strokeWeight: 	1,
 		fillOpacity: 	0.1,
 		strokeOpacity: 	0.5,
-		radius: 		2000,
 		editable: 		true,
 		draggable: 		true,
+		radius: 		4000,
 		fillColor: 		'#ff0000',
 		strokeColor: 	'#ff0000',
-		center: 		position
+		center: 		map.center
 	});
 
-
-	var search = function( map, radius, position ) {
-
-
-	    service.textSearch({ query: 'Cebu Restaurants', type: 'restaurant' }, function( results, status, pagination ) {
-
-
-		    if( status == google.maps.places.PlacesServiceStatus.OK ) {
-
-
-				createMarkers( map, results );
-
-				if( pagination.hasNextPage ) {
-
-					var more = document.getElementById('more');
-
-					more.disabled = false;
-
-
-					more.addEventListener('click', function() {
-
-						more.disabled = true;
-
-						pagination.nextPage();
-
-					});
-
-				}
-		    }
-		});
-
-	};
-
-	search( map, circle.radius, circle.center );
-
+	textSearch( map, circle.radius, circle.center );
 
 
 	google.maps.event.addListener( circle,'dragend', function( event ) {
 
-	    search( map, this.radius, this.center );
+	    textSearch( map, this.radius, new google.maps.LatLng( event.latLng.lat(), event.latLng.lng() ) );
 	});
 
 
 	loadPanel( map );
 }
-
 
 
 
@@ -118,8 +61,52 @@ function addMarker( map, location ) {
 
 
 
-/* Create Markers */
-function createMarkers( map, places ) {
+/* Load Panel */
+function loadPanel( map ) {
+
+	var panel = document.getElementById('panel');
+
+	google.maps.event.addListenerOnce( map, 'idle', function() {
+
+	    panel.style.display = 'block';
+	});
+
+	selectType( panel );
+}
+
+
+
+
+
+/* Text Search */
+function textSearch( map, radius, position ) {
+
+    var service = new google.maps.places.PlacesService( map );
+
+
+    service.textSearch({ radius: radius, location: position, query: 'Cebu Restaurant', type: 'restaurant' }, function( results, status, pagination ) {
+
+
+	    if( status !== google.maps.places.PlacesServiceStatus.OK ) {
+
+	    	return;
+	    }
+
+		makeMarkers( map, results );
+
+
+		if( pagination.hasNextPage ) {
+
+			setPagination( pagination );
+		}
+	});
+}
+
+
+
+
+/* Make Markers */
+function makeMarkers( map, places ) {
 
 
 	var info = getDummyInfo();
@@ -134,11 +121,10 @@ function createMarkers( map, places ) {
 
 		place['info'] = info[i];
 
-
 		marker = addMarker( map, place.geometry.location );
 
 
-		items.innerHTML += getItem( place );
+		items.innerHTML += getPlaceInfo( place );
 
 
 		windowBox( marker, infobox, item, place);
@@ -151,31 +137,6 @@ function createMarkers( map, places ) {
 
 	map.fitBounds( bounds );
 }
-
-
-
-
-/* Get Item */
-function getItem( place ) {
-
-
-	if( place.name ) {
-
-		item = '<h3><i class="color"></i>' + place.name + '</h3>'
-				+'<div class="meta">'
-				+'<i class="rate star-'+ 	 place.info['star'] +'"></i>'
-				+'<p><b>Visits: </b> '+ 	 place.info['visits'] +'/day</p>'
-				+'<p><b>Patrons: </b> '+ 	 place.info['patrons'] +'</p>'
-				+'<p><b>Reserved: </b> '+ 	 place.info['reserved'] +'</p>'
-				+'<p><b>Transactions: </b>'+ place.info['transactions'] +'</p>'
-				+'<p><b>Revenue: </b> PHP '+ place.info['revenue'].toLocaleString('en') +'/mo</p>'
-				+'<p><b>Specialty: </b> '+ 	 place.info['specialty'] +'</p>'
-				+'</div>';
-
-		return '<div class="item type-'+ place.info['type'] +'">'+ item +'</div>';
-	}
-}
-
 
 
 
@@ -231,39 +192,46 @@ function selectType( panel ) {
 
 
 
+function setPagination( pagination ) {
 
-/* Get Markers */
-function getMarkers( data, types ) {
+	var more = document.getElementById('more');
 
-	var markers = [];
-
-	var isTypes = function( types, type ) {
-
-	    for( i = 0; i < types.length; i++ ) {
-
-	        if( types[i] == type ) {
-	        	
-	        	return true;
-	        }
-	    }
-
-	    return false;
-	};
+	more.disabled = false;
 
 
+	more.addEventListener('click', function() {
 
-    for( r = 0; r < data.length; r++ ) {
+		more.disabled = true;
 
-        if( isTypes( types, data[r]['type'] ) ) {
+		pagination.nextPage();
 
-        	markers.push( data[r] );
-        }
-    }
-
-
-	return markers;
+	});
 }
 
+
+
+
+
+/* Get Item */
+function getPlaceInfo( place ) {
+
+
+	if( place.name ) {
+
+		item = '<h3><i class="color"></i>' + place.name + '</h3>'
+				+'<div class="meta">'
+				+'<i class="rate star-'+ 	 place.info['star'] +'"></i>'
+				+'<p><b>Visits: </b> '+ 	 place.info['visits'] +'/day</p>'
+				+'<p><b>Patrons: </b> '+ 	 place.info['patrons'] +'</p>'
+				+'<p><b>Reserved: </b> '+ 	 place.info['reserved'] +'</p>'
+				+'<p><b>Transactions: </b>'+ place.info['transactions'] +'</p>'
+				+'<p><b>Revenue: </b> PHP '+ place.info['revenue'].toLocaleString('en') +'/mo</p>'
+				+'<p><b>Specialty: </b> '+ 	 place.info['specialty'] +'</p>'
+				+'</div>';
+
+		return '<div class="item type-'+ place.info['type'] +'">'+ item +'</div>';
+	}
+}
 
 
 
@@ -290,14 +258,14 @@ function getDirection( place ) {
 
 
 				var map = new google.maps.Map( document.getElementById('map'), { 
-					zoom: 10, 
+					zoom: 10,
 					center: destination
 				});
 
 				display.setMap( map );
 
-				textSearch( map, destination );
 
+				search( map );
 
 
 		    	service.route({
