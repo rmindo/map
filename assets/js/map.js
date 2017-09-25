@@ -56,7 +56,7 @@ function textSearch( map, position ) {
 	var search = function( map, radius, position ) {
 
 
-	    service.textSearch({ radius: radius, location: position, query: 'Cebu Restaurants', type: 'restaurant' }, function( results, status, pagination ) {
+	    service.textSearch({ query: 'Cebu Restaurants', type: 'restaurant' }, function( results, status, pagination ) {
 
 
 		    if( status == google.maps.places.PlacesServiceStatus.OK ) {
@@ -85,13 +85,14 @@ function textSearch( map, position ) {
 
 	};
 
+	search( map, circle.radius, circle.center );
+
+
 
 	google.maps.event.addListener( circle,'dragend', function( event ) {
 
 	    search( map, this.radius, this.center );
 	});
-
-	search( map, circle.radius, circle.center );
 
 
 	loadPanel( map );
