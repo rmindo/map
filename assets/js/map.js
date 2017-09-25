@@ -56,7 +56,7 @@ function nearbySearch( map, position ) {
 	var search = function( map, radius, position ) {
 
 
-	    service.nearbySearch({ radius: radius, location: position, type: ['restaurant'] }, function( results, status, pagination ) {
+	    service.textSearch({ radius: radius, location: position, query: 'Cebu Restaurants', type: 'restaurant' }, function( results, status, pagination ) {
 
 
 		    if( status == google.maps.places.PlacesServiceStatus.OK ) {
@@ -87,7 +87,7 @@ function nearbySearch( map, position ) {
 
 
 	google.maps.event.addListener( circle,'dragend', function( event ) {
-		// console.log();
+
 	    search( map, this.radius, this.center );
 	});
 
@@ -321,7 +321,7 @@ function getDirection( place ) {
 
 	        });
 
-	    } else { 
+	    } else {
 
 	        window.alert('Geo location is not supported by this browser.');
 	    }
