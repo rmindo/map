@@ -12,7 +12,7 @@ function init() {
       	center: cebu
     });
 
-    nearbySearch( map, cebu );
+    textSearch( map, cebu );
 }
 
 
@@ -33,7 +33,7 @@ function loadPanel( map ) {
 
 
 
-function nearbySearch( map, position ) {
+function textSearch( map, position ) {
 
 
 
@@ -120,7 +120,7 @@ function addMarker( map, location ) {
 function createMarkers( map, places ) {
 
 
-	var info = getRestaurantsInfo();
+	var info = getDummyInfo();
 	var infobox = new google.maps.InfoWindow();
 	var bounds  = new google.maps.LatLngBounds();
 
@@ -296,7 +296,7 @@ function getDirection( place ) {
 
 				display.setMap( map );
 
-				nearbySearch( map, destination );
+				textSearch( map, destination );
 
 
 
@@ -336,7 +336,7 @@ function getDirection( place ) {
 
 
 
-function getRestaurantsInfo() {
+function getDummyInfo() {
 
 	return [
 	    {
