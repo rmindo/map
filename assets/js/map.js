@@ -1,7 +1,7 @@
 var markers = [];
 
 
-
+/* Initialize */
 function init() {
 
 
@@ -32,7 +32,7 @@ function loadPanel( map ) {
 
 
 
-
+/* Text Search */
 function textSearch( map, position ) {
 
 
@@ -100,15 +100,16 @@ function textSearch( map, position ) {
 
 
 
+/* Add Marker */
 function addMarker( map, location ) {
 
     var marker = new google.maps.Marker({
-		position: location,
 		map: map,
+		position: location,
 		icon: new google.maps.MarkerImage( 'assets/images/icon.png', new google.maps.Size(32, 32) ),
     });
 
-    markers.push(marker);
+    markers.push( marker );
 
     return marker;
 }
@@ -116,7 +117,7 @@ function addMarker( map, location ) {
 
 
 
-
+/* Create Markers */
 function createMarkers( map, places ) {
 
 
@@ -147,15 +148,13 @@ function createMarkers( map, places ) {
 	document.getElementById('counter').innerHTML = markers.length;
 
 
-
-
-	map.fitBounds(bounds);
+	map.fitBounds( bounds );
 }
 
 
 
 
-/* Item */
+/* Get Item */
 function getItem( place ) {
 
 
