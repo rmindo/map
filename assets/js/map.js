@@ -9,7 +9,7 @@ var getRestaurants = function() {
 	factory.longitude = 123.9005348;
 
 
-
+	// XMLHTTP
 	factory.xhttp = function( url, callback ) {
 
 	    var http = new XMLHttpRequest();
@@ -29,21 +29,21 @@ var getRestaurants = function() {
 
 
 
-	/* Search */
+	// Search
 	factory.search = function( map ) {
 
 		var restaurants = this;
 
 		var circle = new google.maps.Circle({
 			map: 			map,
-			strokeWeight: 	1,
-			fillOpacity: 	0.1,
-			strokeOpacity: 	0.5,
+			strokeWeight:		1,
+			fillOpacity:		0.1,
+			strokeOpacity:		0.5,
 			editable: 		true,
 			draggable: 		true,
-			radius: 		3000,
+			radius: 		2000,
 			fillColor: 		'#ff0000',
-			strokeColor: 	'#ff0000',
+			strokeColor:		'#ff0000',
 			center: 		map.center
 		});
 
@@ -55,13 +55,12 @@ var getRestaurants = function() {
 		    restaurants.textSearch( map, this.radius, new google.maps.LatLng( event.latLng.lat(), event.latLng.lng() ) );
 		});
 
-
 		this.loadPanel( map );
 	},
 
 
 
-	/* Add Marker */
+	// Add Marker
 	factory.addMarker =function( map, location ) {
 
 	    var marker = new google.maps.Marker({
@@ -78,7 +77,7 @@ var getRestaurants = function() {
 
 
 
-	/* Load Panel */
+	// Load Panel
 	factory.loadPanel = function( map ) {
 
 		var panel = document.getElementById('panel');
@@ -95,7 +94,7 @@ var getRestaurants = function() {
 
 
 
-	/* Text Search */
+	// Text Search
 	factory.textSearch = function( map, radius, position ) {
 
 		var restaurants = this;
@@ -131,7 +130,7 @@ var getRestaurants = function() {
 
 
 
-	/* Make Markers */
+	// Make Markers
 	factory.makeMarkers = function( map, radius, places, info ) {
 
 
@@ -165,7 +164,7 @@ var getRestaurants = function() {
 
 
 
-	/* Info Box */
+	// Info Box
 	factory.windowBox = function( marker, infobox, item, place ) {
 
 
@@ -185,7 +184,7 @@ var getRestaurants = function() {
 
 
 
-	/* Select Type */
+	// Select Type
 	factory.selectType = function( panel ) {
 
 
@@ -215,7 +214,7 @@ var getRestaurants = function() {
 
 
 
-
+	// Pagination
 	factory.setPagination = function( pagination ) {
 
 		var more = document.getElementById('more');
@@ -236,7 +235,7 @@ var getRestaurants = function() {
 
 
 
-	/* Get Item */
+	// Get Item
 	factory.getPlaceInfo = function( place ) {
 
 
@@ -260,7 +259,7 @@ var getRestaurants = function() {
 
 
 
-	/* Get Direction */
+	// Get Direction
 	factory.getDirection = function( place ) {
 
 		var place = place.geometry.location
@@ -277,39 +276,38 @@ var getRestaurants = function() {
 		        navigator.geolocation.getCurrentPosition( function( position ) {
 
 
-					var display = new google.maps.DirectionsRenderer;
-					var service = new google.maps.DirectionsService;
+				var display = new google.maps.DirectionsRenderer;
+				var service = new google.maps.DirectionsService;
 
 
-					var map = new google.maps.Map( document.getElementById('map'), { 
-						zoom: 10,
-						center: destination
-					});
+				var map = new google.maps.Map( document.getElementById('map'), { 
+					zoom: 10,
+					center: destination
+				});
 
-					display.setMap( map );
+				display.setMap( map );
 
 
-					this.search( map );
+				this.search( map );
 
 
 			    	service.route({
 
-			    		destination: destination,
-			    		travelMode: google.maps.DirectionsTravelMode.DRIVING,
-						origin: { lat: position.coords.latitude, lng: position.coords.longitude }
+					destination: destination,
+					travelMode: google.maps.DirectionsTravelMode.DRIVING,
+					origin: { lat: position.coords.latitude, lng: position.coords.longitude }
 
-					}, function( response, status ) {
+				}, function( response, status ) {
 
-						if( status == 'OK') {
+					if( status == 'OK') {
+						
+						display.setDirections( response );
+						
+					} else {
 
-							display.setDirections( response );
-
-						} else {
-
-							window.alert('Directions request failed due to ' + status );
-						}
-
-					});
+						window.alert('Directions request failed due to ' + status );
+					}
+				});
 
 		        });
 
@@ -317,8 +315,6 @@ var getRestaurants = function() {
 
 		        window.alert('Geo location is not supported by this browser.');
 		    }
-
-
 
 		}
 	};
@@ -329,10 +325,10 @@ var getRestaurants = function() {
 
 
 
-/* Initialize */
+// Initialize
 function init() {
 
 	var search = getRestaurants();
 
-    search.search( new google.maps.Map( document.getElementById('map'), { center: new google.maps.LatLng( search.latitude, search.longitude ) }));
+	search.search( new google.maps.Map( document.getElementById('map'), { center: new google.maps.LatLng( search.latitude, search.longitude ) }));
 }
