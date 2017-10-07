@@ -1,4 +1,4 @@
-var getRestaurants = function() {
+function restaurants() {
 
 	// Factory
 	var factory = {};
@@ -6,11 +6,13 @@ var getRestaurants = function() {
 
 	factory.markers = [];
 
+
 	factory.default = {
 		query: 		'Cebu',
 		latitude: 	10.31337,
 		longitude: 	123.9005348
 	};
+
 
 
 	factory.xhttp = function( url, callback ) {
@@ -60,7 +62,7 @@ var getRestaurants = function() {
 
 
 		this.loadPanel( map );
-	},
+	};
 
 
 
@@ -76,7 +78,7 @@ var getRestaurants = function() {
 	    this.markers.push( marker );
 
 	    return marker;
-	},
+	};
 
 
 
@@ -92,7 +94,7 @@ var getRestaurants = function() {
 		});
 
 		this.selectType( panel );
-	},
+	};
 
 
 
@@ -130,7 +132,7 @@ var getRestaurants = function() {
 
 		});
 
-	},
+	};
 
 
 
@@ -164,7 +166,7 @@ var getRestaurants = function() {
 
 		map.fitBounds( bounds );
 
-	},
+	};
 
 
 
@@ -183,7 +185,7 @@ var getRestaurants = function() {
 			this.getDirection( place );
 		});
 
-	},
+	};
 
 
 
@@ -215,27 +217,7 @@ var getRestaurants = function() {
 
 			};
 		}
-	},
-
-
-
-
-	factory.setPagination = function( pagination ) {
-
-		var more = document.getElementById('more');
-
-		more.disabled = false;
-
-
-		more.addEventListener('click', function() {
-
-			more.disabled = true;
-
-			pagination.nextPage();
-
-		});
-	},
-
+	};
 
 
 
@@ -259,7 +241,7 @@ var getRestaurants = function() {
 
 			return '<div class="item type-'+ place.info['type'] +'">'+ item +'</div>';
 		}
-	},
+	};
 
 
 
@@ -338,9 +320,9 @@ var getRestaurants = function() {
 /* Initialize */
 function init() {
 
-	var search = getRestaurants();
-
-    search.search( new google.maps.Map( document.getElementById('map'), { center: new google.maps.LatLng( search.default.latitude, search.default.longitude ) }));
+	var resto = new restaurants();
+	
+	resto.search( new google.maps.Map( document.getElementById('map'), { center: new google.maps.LatLng( resto.default.latitude, resto.default.longitude ) }));
 }
 
 
