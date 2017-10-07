@@ -8,7 +8,7 @@ function restaurants() {
 
 
 	factory.default = {
-		query: 		'Cebu',
+		query: 		'Cebu Restaurants',
 		latitude: 	10.31337,
 		longitude: 	123.9005348
 	};
@@ -37,7 +37,7 @@ function restaurants() {
 	/* Search */
 	factory.search = function( map ) {
 
-		var restaurants = this;
+		var owner = this;
 
 		var circle = new google.maps.Circle({
 			map: 			map,
@@ -52,12 +52,22 @@ function restaurants() {
 			center: 		map.center
 		});
 
-		this.textSearch( map, circle.radius, circle.center );
+		var request = {
+			radius: circle.radius,
+			location: circle.center,
+			query: this.default.query
+		};
+
+
+		this.textSearch( map, request );
 
 
 		google.maps.event.addListener( circle, 'dragend', function( event ) {
 
-		    restaurants.textSearch( map, this.radius, new google.maps.LatLng( event.latLng.lat(), event.latLng.lng() ) );
+			request.radius = this.radius;
+			request.location = new google.maps.LatLng( event.latLng.lat(), event.latLng.lng() );
+
+		    owner.textSearch( map, request );
 		});
 
 
@@ -101,9 +111,9 @@ function restaurants() {
 
 
 	/* Text Search */
-	factory.textSearch = function( map, radius, position ) {
+	factory.textSearch = function( map, request ) {
 
-		var restaurants = this;
+		var owner = this;
 
 
 		this.xhttp('info.json', function( data ) {
@@ -112,7 +122,7 @@ function restaurants() {
 
 	    	var service = new google.maps.places.PlacesService( map );
 
-		    service.textSearch({ location: position, query: restaurants.default.query, type: 'restaurant' }, function( results, status, pagination ) {
+		    service.textSearch( request, function( results, status, pagination ) {
 
 
 			    if( status !== google.maps.places.PlacesServiceStatus.OK ) {
@@ -120,12 +130,12 @@ function restaurants() {
 			    	return;
 			    }
 
-				restaurants.makeMarkers( map, radius, results, JSON.parse(data) );
+				owner.makeMarkers( map, results, JSON.parse(data) );
 			
 
 				if( pagination.hasNextPage ) {
 
-					restaurants.setPagination( pagination );
+					owner.setPagination( pagination );
 				}
 
 			});
@@ -138,7 +148,7 @@ function restaurants() {
 
 
 	/* Make Markers */
-	factory.makeMarkers = function( map, radius, places, info ) {
+	factory.makeMarkers = function( map, places, info ) {
 
 
 		var marker;
@@ -174,6 +184,7 @@ function restaurants() {
 	/* Info Box */
 	factory.windowBox = function( marker, infobox, item, place ) {
 
+		var owner = this;
 
 		google.maps.event.addListener( marker, 'click', function() {
 
@@ -182,7 +193,7 @@ function restaurants() {
 
 			infobox.open( map, marker );
 
-			this.getDirection( place );
+			owner.getDirection( place );
 		});
 
 	};
@@ -222,6 +233,24 @@ function restaurants() {
 
 
 
+	factory.setPagination = function( pagination ) {
+
+		var more = document.getElementById('more');
+
+		more.disabled = false;
+
+
+		more.addEventListener('click', function() {
+
+			more.disabled = true;
+
+			pagination.nextPage();
+
+		});
+	};
+
+
+
 	/* Get Item */
 	factory.getPlaceInfo = function( place ) {
 
@@ -233,7 +262,6 @@ function restaurants() {
 					+'<i class="rate star-'+ 	 place.info['star'] +'"></i>'
 					+'<p><b>Visits: </b> '+ 	 place.info['visits'] +'/day</p>'
 					+'<p><b>Patrons: </b> '+ 	 place.info['patrons'] +'</p>'
-					+'<p><b>Reserved: </b> '+ 	 place.info['reserved'] +'</p>'
 					+'<p><b>Transactions: </b>'+ place.info['transactions'] +'</p>'
 					+'<p><b>Revenue: </b> PHP '+ place.info['revenue'].toLocaleString('en') +'/mo</p>'
 					+'<p><b>Specialty: </b> '+ 	 place.info['specialty'] +'</p>'
@@ -248,6 +276,8 @@ function restaurants() {
 
 	/* Get Direction */
 	factory.getDirection = function( place ) {
+
+		var owner = this;
 
 		var place = place.geometry.location
 		
@@ -275,9 +305,6 @@ function restaurants() {
 					display.setMap( map );
 
 
-					this.search( map );
-
-
 			    	service.route({
 
 			    		destination: destination,
@@ -287,6 +314,8 @@ function restaurants() {
 					}, function( response, status ) {
 
 						if( status == 'OK') {
+
+							owner.search( map );
 
 							display.setDirections( response );
 
@@ -321,7 +350,7 @@ function restaurants() {
 function init() {
 
 	var resto = new restaurants();
-	
+
 	resto.search( new google.maps.Map( document.getElementById('map'), { center: new google.maps.LatLng( resto.default.latitude, resto.default.longitude ) }));
 }
 
